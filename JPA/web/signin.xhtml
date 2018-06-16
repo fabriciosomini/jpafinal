@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <title>Freelancer</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/styles/style.css" type="text/css" />
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    </h:head>
+    <h:body>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container" align="center">
+                <h1 class="display-4">FreeLancer</h1>
+                <p class="lead">Encontre o freelancer para o seu projeto!</p>
+                <p align="right"></p>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5>Forneça suas credenciais para entrar</h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <hr />
+                </div>
+            </div>
+
+            <h:form>  
+                <div class="row row-spaced">
+                    <div class="col">
+                        <p:inputText id="signup-email" class="form-control" pt:placeholder="E-mail" value="#{userMB.user.email}" />
+                    </div>
+                </div>
+                <div class="row row-spaced">
+                    <div class="col">
+                        <p:password id="signup-pass" class="form-control" pt:placeholder="Senha" value="#{userMB.user.password}" />
+                    </div>
+                </div>
+
+                <div class="row row-spaced">
+                    <div class="col-2">
+                        <p:commandButton class="btn-block btn-primary" value="Voltar" action="index.xhtml?faces-redirect=true" />
+                    </div>
+                    <div class="col-8"></div>
+                    <div class="col-2">
+                        <p:commandButton class="btn-block btn-success" value="Entrar" actionListener="#{userMB.login()}" />
+                    </div>
+                </div>
+            </h:form>            
+
+            <div class="row">
+                <div class="col">
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" align="center">
+                    <p>Autores: Fabricio M. Somini e Guilherme C. Milak</p>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
+

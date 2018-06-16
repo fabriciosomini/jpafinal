@@ -22,6 +22,7 @@ import repository.UserRepository;
 public class UserMB {
     private static UserMB userMB;
     private User user;
+    private Authentication authentication;
 
     public static UserMB getUserMB() {
         return userMB;
@@ -47,8 +48,8 @@ public class UserMB {
     }
 
     public boolean isAuthorized() {
-        //TODO: retornar com lógica
-        return true;
+        boolean isAuthorized = UserRepository.isUserAuthorized(authentication);
+        return isAuthorized;
     }
 
     public User getUser() {
