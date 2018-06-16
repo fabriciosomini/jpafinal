@@ -62,6 +62,7 @@ public class UserMB {
             Authentication authentication = new Authentication();  
             authentication.setSessionId(sessionId);
             //authentication.setUser();
+            user = dbUser;
             return "index.xhtml";
         }else{
             return "signup.xhtml";
