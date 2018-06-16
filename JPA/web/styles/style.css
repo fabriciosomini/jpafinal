@@ -1,0 +1,17 @@
+body {
+    background-color: #f8f9fb;
+}
+
+.row-spaced {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.display-inline {
+    display: inline;
+}
+
+.h-spaced {
+    margin-left: 1rem;
+    margin-right: 0.2rem;
+}

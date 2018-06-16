@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -28,13 +29,13 @@
                 <div class="col-9"></div>
                 <div class="col-3" style="text-align: right;">
                     <p:commandButton class="h-spaced btn-success" value="Entrar" />
-                    <p:commandButton class="h-spaced btn-primary" value="Cadastrar" action="signup.xhtml?faces-redirect=true" />
+                    <p:commandButton class="h-spaced btn-primary" value="Cadastrar" />
                 </div>
             </div>
 
             <div class="row">
-                <div class="col" align="center">
-                    <h3>Lista de trabalhos</h3>
+                <div class="col">
+                    <h5>Forneça as seguintes informações para se cadastrar</h5>
                 </div>
             </div>
 
@@ -44,33 +45,39 @@
                 </div>
             </div>
 
-            <div class="row row-spaced">
-                <div class="col">
-                    <h:form>
-                        <p:dataTable id="table-jobs" value="#{jobMB.jobs}" var="job" styleClass="table table-bordered table-striped"
-                                     rows="10"
-                                     paginator="true"
-                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="10,20,35">
-                            <p:column width="50%">
-                                <f:facet name="header">Trabalho</f:facet>
-                                <h:outputText value="#{job.description}" />
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">Valor por hora</f:facet>
-                                <h:outputText value="#{job.amountPerHour}" />
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">Contratante</f:facet>
-                                <h:outputText value="#{job.hirer.firstName} + #{job.hirer.lastName}" />
-                            </p:column>
-                            <p:column>
-                                <p:commandButton value="Candidatar-se" actionListener="#{jobMB.addJobRequest(job)}" />
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>  
+            <h:form>
+                <div class="row row-spaced">
+                    <div class="col">
+                        <p:inputText id="signup-name" class="form-control" pt:placeholder="Nome" value="#{userMB.user.firstName}" />
+                    </div>
                 </div>
-            </div>
+                <div class="row row-spaced">
+                    <div class="col">
+                        <p:inputText id="signup-last-name" class="form-control" pt:placeholder="Sobrenome" value="#{userMB.user.lastName}" />
+                    </div>
+                </div>
+                <div class="row row-spaced">
+                    <div class="col">
+                        <p:inputText id="signup-cpf" class="form-control" pt:placeholder="CPF" value="#{userMB.user.nationalIdentity}" />
+                    </div>
+                </div>
+                <div class="row row-spaced">
+                    <div class="col">
+                        <p:inputText id="signup-email" class="form-control" pt:placeholder="E-mail" value="#{userMB.user.email}" />
+                    </div>
+                </div>
+                <div class="row row-spaced">
+                    <div class="col">
+                        <p:password id="signup-pass" class="form-control" pt:placeholder="Senha" value="#{userMB.user.password}" />
+                    </div>
+                </div>
+
+                <div class="row row-spaced">
+                    <div class="col-2">
+                        <p:commandButton class="btn-success" value="Cadastrar" actionListener="#{userMB.signUp()}" />
+                    </div>
+                </div>
+            </h:form>            
 
             <div class="row">
                 <div class="col">
