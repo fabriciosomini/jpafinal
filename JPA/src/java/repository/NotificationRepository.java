@@ -5,7 +5,10 @@
  */
 package repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import model.Notification;
+import model.User;
 
 /**
  *
@@ -15,6 +18,12 @@ public class NotificationRepository {
 
     public static void insertNotification(Notification notification) {
         //TODO: adicionar no banco
+    }
+
+    public static List<Notification> getNotifications(User currentUser) {
+        //TODO: pegar do banco
+        
+        return new ArrayList();
     }
     
 }
