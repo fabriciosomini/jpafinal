@@ -18,11 +18,21 @@ public class Notification implements Serializable {
 
     @Id
     private int id;
+    private Job job;
     private User hirer;
     private User hiree;
     private String description;
     private NotificationType notificationType;
 
+    
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
+ 
     public int getId() {
         return id;
     }
