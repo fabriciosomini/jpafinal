@@ -23,13 +23,27 @@ import repository.NotificationRepository;
 @Named(value = "notificationMB")
 @Dependent
 public class NotificationMB {
-
-    private List<Notification> notifications;
-    
     private static NotificationMB notificationMB;
+    private List<Notification> notifications;
+
+    public static NotificationMB getNotificationMB() {
+        return notificationMB;
+    }
+
+    public static void setNotificationMB(NotificationMB notificationMB) {
+        NotificationMB.notificationMB = notificationMB;
+    }
+
 
     public static NotificationMB getInstance() {
         return notificationMB;
+    }
+   
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     @PostConstruct
@@ -39,14 +53,11 @@ public class NotificationMB {
         notifications = NotificationRepository.getNotifications(currentUser);
     }
 
-
     void generateNotification(NotificationType notificationType, User hirer, User hiree) {
-        
-        Notification notification =  NotificationHelper.generate(notificationType, hirer, hiree);
+
+        Notification notification = NotificationHelper.generate(notificationType, hirer, hiree);
         NotificationRepository.insertNotification(notification);
-        
+
     }
-    
-    
-    
+
 }
