@@ -5,16 +5,34 @@
  */
 package test;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author fabri
  */
+
+@Entity
 public class ChildTestModel {
     @Id
     private int childCodigo; 
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cod_testmodel")
+    private TestModel testModel; 
+
+    public TestModel getTestModel() {
+        return testModel;
+    }
+
+    public void setTestModel(TestModel testModel) {
+        this.testModel = testModel;
+    }
+    
     public int getChildCodigo() {
         return childCodigo;
     }
@@ -31,4 +49,7 @@ public class ChildTestModel {
         this.childNome = childNome;
     }
     private String childNome;
+    
+    
+    
 }

@@ -6,8 +6,11 @@
 package test;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,7 +23,12 @@ public class TestModel {
     @Id
     private int codigo; 
     private String nome;
-    //private List<ChildTestModel> children;
+    
+    @OneToMany(fetch = FetchType.LAZY, 
+            mappedBy = "TestModel", //nome exato da classe 
+            orphanRemoval = true, 
+            cascade = CascadeType.ALL)
+    private List<ChildTestModel> children;
 
     public int getCodigo() {
         return codigo;
@@ -38,13 +46,13 @@ public class TestModel {
         this.nome = nome;
     }
 
-    /*public List<ChildTestModel> getChildren() {
+    public List<ChildTestModel> getChildren() {
         return children;
     }
 
     public void setChildren(List<ChildTestModel> children) {
         this.children = children;
-    }*/
-    
+    }
+   
     
 }

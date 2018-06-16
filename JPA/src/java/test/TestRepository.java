@@ -2,6 +2,7 @@ package test;
 
 
 import app.JPA;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -30,7 +31,8 @@ public class TestRepository {
     
     public static List<TestModel> getTestModels() {
         EntityManager em = JPA.getEM();
-        return em.createQuery("select p from TestModel p", TestModel.class).getResultList();
+        TypedQuery<TestModel> result = em.createQuery("select p from TestModel p", TestModel.class);
+        return result.getResultList();
     }
     
     public static List<TestModel> getTestModels(String valor) {
