@@ -1,12 +1,14 @@
-package test;
+package repository;
 
 
 import app.JPA;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import model.User;
+import test.TestModel;
 
-public class TestRepository {
+public class UserRepository {
     
     public static void salvar(TestModel testModel) {
         EntityManager em = JPA.getEM();
@@ -40,5 +42,24 @@ public class TestRepository {
         TypedQuery<TestModel> query = em.createQuery("select x from TestModel x where x.nome like :valor", TestModel.class);
         query.setParameter("valor", "%" + valor + "%");
         return query.getResultList();
+    }
+
+    public static User getUser(User user) {
+        //TODO: Buscar do banco
+        String email = "fabricio.somini@gmail.com";
+        String firstName = "Fabricio";
+        String lastName = "Somini";
+        String cpf = "877.593.036-61";
+        String password = "#$%_FA15";
+        
+        User dbUser = new User();
+        dbUser.setId(0);
+        dbUser.setEmail(email);
+        dbUser.setFirstName(firstName);
+        dbUser.setLastName(lastName);
+        dbUser.setNationalIdentity(cpf);
+        dbUser.setPassword(password);
+        
+        return dbUser; 
     }
 }
