@@ -5,9 +5,11 @@
  */
 package mb;
 
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import model.Authentication;
 import model.User;
 import repository.UserRepository;
 
@@ -56,6 +58,11 @@ public class UserMB {
     public String login(){
         User dbUser = UserRepository.getUser(user);
         if(dbUser != null){
+            String sessionId = UUID.randomUUID().toString().replace("-", "");
+            Authentication authentication = new Authentication();  
+            authentication.setSessionId(sessionId);
+            //authentication.setUser();
+            user = dbUser;
             return "index.xhtml";
         }else{
             return "signup.xhtml";

@@ -26,14 +26,16 @@ public class NotificationMB {
     private static NotificationMB notificationMB;
     private List<Notification> notifications;
 
+    @PostConstruct
+    public void init() {
+        notificationMB = this;
+        User currentUser = UserMB.getInstance().getUser();
+        notifications = NotificationRepository.getNotifications(currentUser);
+    }
+    
     public static NotificationMB getNotificationMB() {
         return notificationMB;
     }
-
-    public static void setNotificationMB(NotificationMB notificationMB) {
-        NotificationMB.notificationMB = notificationMB;
-    }
-
 
     public static NotificationMB getInstance() {
         return notificationMB;
@@ -46,18 +48,15 @@ public class NotificationMB {
         this.notifications = notifications;
     }
 
-    @PostConstruct
-    public void init() {
-        notificationMB = this;
-        User currentUser = UserMB.getInstance().getUser();
-        notifications = NotificationRepository.getNotifications(currentUser);
-    }
-
-    void generateNotification(NotificationType notificationType, User hirer, User hiree) {
+    public void generateNotification(NotificationType notificationType, User hirer, User hiree) {
 
         Notification notification = NotificationHelper.generate(notificationType, hirer, hiree);
         NotificationRepository.insertNotification(notification);
 
+    }
+    
+    public String removeNotification(){
+        return "";
     }
 
 }
