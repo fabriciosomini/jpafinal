@@ -45,6 +45,7 @@ public class UserMB {
     }
 
     public boolean isAuthorized() {
+        //TODO: retornar com lógica
         return true;
     }
 
