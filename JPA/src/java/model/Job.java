@@ -56,5 +56,13 @@ public class Job implements Serializable {
     public void setHirer(User hirer) {
         this.hirer = hirer;
     }
+    
+    public List<User> getHirees() {
+        return hirees;
+    }
+
+    public void addHirees(User hiree) {
+        this.hirees.add(hiree);
+    }
 
 }
