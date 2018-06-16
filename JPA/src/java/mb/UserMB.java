@@ -15,7 +15,7 @@ import repository.UserRepository;
  *
  * @author fabri
  */
-@Named(value = "userJB")
+@Named(value = "userMB")
 @Dependent
 public class UserMB {
 
@@ -40,13 +40,19 @@ public class UserMB {
         return user;
     }
     
-    public boolean login(){
+    public String login(){
         User dbUser = UserRepository.getUser(user);
         if(dbUser != null){
-            return true;
+            return "index.xhtml";
         }else{
-            return false;
+            return "signup.xhtml";
         }
+    }
+    
+    public boolean signUp(){
+        
+        //TODO: Retornar do banco
+        return true;
     }
 
 }

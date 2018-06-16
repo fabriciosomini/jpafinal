@@ -8,8 +8,8 @@ package mb;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 import model.Job;
 import model.NotificationType;
 import model.User;
@@ -49,10 +49,6 @@ public class JobMB {
         });
         User hirer = job.getHirer();
         NotificationMB.getInstance().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
-    }
-
-    private void generateNotification() {
-
     }
 
     private void generateMemoryData() {
