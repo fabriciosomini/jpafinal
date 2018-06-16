@@ -41,7 +41,7 @@ public class JobMB {
     }
 
     public void addJobRequest(Job job) {
-        User currentUser = UserMB.getInstance().getCurrentUser();
+        User currentUser = UserMB.getInstance().getUser();
         jobs.stream().forEach(p -> {
             if (p.getId() == job.getId()) {
                 p.addHirees(currentUser);

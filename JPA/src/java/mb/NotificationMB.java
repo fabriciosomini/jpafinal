@@ -6,6 +6,8 @@
 package mb;
 
 import helper.NotificationHelper;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
@@ -22,6 +24,8 @@ import repository.NotificationRepository;
 @Dependent
 public class NotificationMB {
 
+    private List<Notification> notifications;
+    
     private static NotificationMB notificationMB;
 
     public static NotificationMB getInstance() {
@@ -31,15 +35,18 @@ public class NotificationMB {
     @PostConstruct
     public void init() {
         notificationMB = this;
+        User currentUser = UserMB.getInstance().getUser();
+        notifications = NotificationRepository.getNotifications(currentUser);
     }
 
 
     void generateNotification(NotificationType notificationType, User hirer, User hiree) {
         
-        
         Notification notification =  NotificationHelper.generate(notificationType, hirer, hiree);
         NotificationRepository.insertNotification(notification);
         
     }
+    
+    
     
 }

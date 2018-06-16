@@ -6,8 +6,8 @@
 package mb;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 import model.User;
 import repository.UserRepository;
 
@@ -18,12 +18,24 @@ import repository.UserRepository;
 @Named(value = "userMB")
 @Dependent
 public class UserMB {
-
-    private User user;
     private static UserMB userMB;
+    private User user;
+
+    public static UserMB getUserMB() {
+        return userMB;
+    }
+
+    public static void setUserMB(UserMB userMB) {
+        UserMB.userMB = userMB;
+    }
 
     public static UserMB getInstance() {
         return userMB;
+    }
+  
+    
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @PostConstruct
@@ -33,10 +45,11 @@ public class UserMB {
     }
 
     public boolean isAuthorized() {
+        //TODO: retornar com lógica
         return true;
     }
 
-    public User getCurrentUser() {
+    public User getUser() {
         return user;
     }
     
