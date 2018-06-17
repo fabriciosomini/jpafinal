@@ -15,41 +15,12 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/styles/style.css" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet" />
-
+        
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>       
     </h:head>
     <h:body>
-        <script>
-            $(function () {
-                $("[data-toggle=popover]").popover({
-                    html: true,
-                    content: function () {
-                        return $('.popover-body').html();
-                    },
-                    title: function () {
-                        var title = $(this).attr("data-popover-content");
-                        return $(title).children(".popover-heading").html();
-                    }
-                });
-            });
-        </script>
-
-        <!-- #################################### DIV POPOVER DE NOTIFICAÇÕES #################################### -->
-
-        <div class="popover-body" style="display: none;">
-            <h:form>
-                <ul>
-                    <c:forEach var="notification" items="#{notificationMB.notifications}">
-                        <li><p:commandLink action="signup.xhtml?faces-redirect=true" value="#{notification.description}" /></li>
-                    </c:forEach>
-                </ul>
-            </h:form>
-        </div>
-
-        <!-- #################################### DIV POPOVER DE NOTIFICAÇÕES #################################### -->
-
         <div class="jumbotron jumbotron-fluid img">
             <div class="container" align="center">
                 <h1 class="display-4">FreeLancer</h1>
@@ -96,10 +67,7 @@
 
             <div class="row row-spaced" style="margin-bottom: -0.5rem;">
                 <div class="col" align="center">
-                    <h3 style="display: inline;">Lista de trabalhos</h3>
-                    <a href="#" data-toggle="popover" title="Notificações" data-placement="bottom" data-content="" style="float: right;">
-                        <p:commandButton class="btn-notification" value="5" rendered="#{userMB.isAuthorized()}" />
-                    </a>                   
+                    <h4 style="display: inline;">Descrição do trabalho</h4>
                 </div>
             </div>
 
@@ -109,34 +77,82 @@
                 </div>
             </div>
 
-            <div class="row row-spaced">
-                <div class="col">
-                    <h:form>
-                        <p:dataTable id="table-jobs" value="#{jobMB.jobs}" var="job" styleClass="table table-bordered table-striped"
-                                     rows="10"
-                                     paginator="true"
-                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="10,20,35">
-                            <p:column width="50%">
-                                <f:facet name="header">Trabalho</f:facet>
-                                <h:commandLink value="#{job.title}" action="jobdetails.xhtml?faces-redirect=true" />
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">Valor por hora</f:facet>
-                                <h:outputText value="#{job.amountPerHour}" />
-                            </p:column>
-                            <p:column>
-                                <f:facet name="header">Contratante</f:facet>
-                                <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
-                            </p:column>
-                            <p:column>
-                                <p:commandButton class="btn-primary" value="Candidatar-se" actionListener="#{jobMB.addJobRequest(job)}" rendered="#{userMB.isAuthorized()}" />
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>  
-                </div>
-            </div>
+            <h:form>
+                <h:panelGroup id="pg-job-edit" rendered="#{jobMB.isJobMine()}">
+                    <div class="row row-spaced">
+                        <div class="col">
+                            <p:inputText class="form-control" value="#{jobMB.job.title}" pt:placeholder="Título do trabalho" />
+                        </div>
+                    </div>
+                    <div class="row row-spaced">
+                        <div class="col">
+                            <p:inputTextarea class="form-control" value="#{jobMB.job.description}" pt:placeholder="Descrição do trabalho" />
+                        </div>
+                    </div>
+                    <div class="row row-spaced">
+                        <div class="col-3">
+                            <p:inputText class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" />
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-3" align="right">
+                            <h5 style="display: inline; line-height: 2rem;">Contratante: </h5>
+                            <p:outputLabel value="#{jobMB.job.hirer}"  />
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col">
+                            <hr />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col" align="center">
+                            <h5>Lista de candidatos</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p:dataTable id="table-hirees" value="#{jobMB.job.hirees}" var="hire" styleClass="table table-bordered table-striped"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,20,35">
+                                <p:column width="40%">
+                                    <f:facet name="header">Nome</f:facet>
+                                    <h:commandLink value="#{hire.firstName} #{hire.lastName}" action="jobdetails.xhtml?faces-redirect=true" />
+                                </p:column>
+                                <p:column width="40%">
+                                    <f:facet name="header">E-mail</f:facet>
+                                    <h:outputText value="#{hire.email}" />
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton class="btn-success" value="Contratar" actionListener="#{jobMB.acceptHire(hire)}" />
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="pg-job-read" rendered="#{!jobMB.isJobMine()}">
+                    <div class="row row-spaced">
+                        <div class="col">
+
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <div class="row row-spaced">
+                    <div class="col-1">
+                        <p:link outcome="index" class="btn btn-block btn-primary" value="Voltar" />
+                    </div>
+                </div>
+            </h:form>
             <div class="row">
                 <div class="col">
                     <hr />
