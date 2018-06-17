@@ -6,15 +6,12 @@
 package repository;
 
 import app.JPA;
-import java.util.HashMap;
+import entity.BaseModel;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
-import model.Authentication;
-import model.BaseModel;
-import model.User;
 import test.TestModel;
 
 /**

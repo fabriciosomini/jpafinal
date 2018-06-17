@@ -12,9 +12,10 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.SessionScoped;
-import model.Notification;
+import entity.Notification;
 import model.NotificationType;
-import model.User;
+import entity.User;
+import javax.faces.bean.ManagedBean;
 import repository.NotificationRepository;
 
 /**
@@ -22,8 +23,10 @@ import repository.NotificationRepository;
  * @author fabri
  */
 @Named(value = "notificationMB")
+@ManagedBean
 @SessionScoped
 public class NotificationMB {
+
     private static NotificationMB INSTANCE;
     private List<Notification> notifications;
     private NotificationRepository notificationRepository;
@@ -31,19 +34,27 @@ public class NotificationMB {
     @PostConstruct
     public void init() {
         INSTANCE = this;
-        User currentUser = UserMB.getINSTANCE().getUser();
-        String  userId = String.valueOf(currentUser.getId());
+
         notificationRepository = new NotificationRepository();
-        notifications = notificationRepository.get("id", userId);
+
     }
-    
+
     public static NotificationMB getINSTANCE() {
         return INSTANCE;
     }
 
     public List<Notification> getNotifications() {
+        if (notifications == null) {
+            UserMB userMB = UserMB.getINSTANCE();
+            if (userMB != null) {
+                User currentUser = userMB.getUser();
+                String userId = String.valueOf(currentUser.getId());
+                notifications = notificationRepository.get("id", userId);
+            }
+        }
         return notifications;
     }
+
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
@@ -54,8 +65,8 @@ public class NotificationMB {
         notificationRepository.insert(notification);
 
     }
-    
-    public String removeNotification(){
+
+    public String removeNotification() {
         return "";
     }
 

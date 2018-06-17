@@ -8,19 +8,19 @@ package mb;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
-import model.Job;
+import entity.Job;
 import model.NotificationType;
-import model.User;
-import repository.JobRepository;
+import entity.User;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author fabri
  */
 @Named(value = "jobMB")
+@ManagedBean
 @SessionScoped
 public class JobMB {
 
@@ -97,6 +97,10 @@ public class JobMB {
     
     public void acceptHiree(User hiree){
         
+    }
+    
+    public void edit(Job job){
+        this.job = job;
     }
 
 }

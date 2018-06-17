@@ -3,28 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import model.NotificationType;
 
 /**
  *
  * @author fabri
  */
 @Entity
-public class Notification extends BaseModel{
-
-    @Id
-    private int id;
+public class Notification extends BaseModel {
+    
+    @ManyToOne
     private Job job;
+    @ManyToOne
     private User hirer;
+    @ManyToOne
     private User hiree;
     private String description;
     private NotificationType notificationType;
 
-    
     public Job getJob() {
         return job;
     }
@@ -32,7 +34,7 @@ public class Notification extends BaseModel{
     public void setJob(Job job) {
         this.job = job;
     }
- 
+
     public int getId() {
         return id;
     }

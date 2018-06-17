@@ -5,12 +5,7 @@
  */
 package repository;
 
-import app.JPA;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import model.Authentication;
-import model.Notification;
+import entity.Authentication;
 
 /**
  *

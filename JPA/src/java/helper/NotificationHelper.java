@@ -5,9 +5,9 @@
  */
 package helper;
 
-import model.Notification;
+import entity.Notification;
 import model.NotificationType;
-import model.User;
+import entity.User;
 
 /**
  *

@@ -5,8 +5,7 @@
  */
 package repository;
 
-import model.Job;
-import model.Notification;
+import entity.Job;
 
 /**
  *

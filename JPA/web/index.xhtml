@@ -42,7 +42,9 @@
             <h:form>
                 <ul>
                     <c:forEach var="notification" items="#{notificationMB.notifications}">
-                        <li><p:commandLink action="signup.xhtml?faces-redirect=true" value="#{notification.description}" /></li>
+                        <li><p:commandLink action="jobsdetails.xhtml?faces-redirect=true"
+                                           actionListener="#{jobMB.edit(notification.job)}"
+                                           value="#{notification.description}" /></li>
                     </c:forEach>
                 </ul>
             </h:form>

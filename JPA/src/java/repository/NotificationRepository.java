@@ -5,10 +5,7 @@
  */
 package repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import model.Notification;
-import model.User;
+import entity.Notification;
 
 /**
  *

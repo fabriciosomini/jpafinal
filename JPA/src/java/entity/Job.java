@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package entity;
 
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -17,10 +19,15 @@ import javax.persistence.Id;
 @Entity
 public class Job extends BaseModel{
 
+    @OneToMany(mappedBy = "job")
+    private List<Notification> notifications;
+
     private String title;
     private String description;
     private float amountPerHour;
+    @ManyToOne
     private User hirer;
+    @ManyToOne
     private User acceptedHiree;
 
     public User getAcceptedHiree() {

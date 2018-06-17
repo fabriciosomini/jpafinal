@@ -8,16 +8,14 @@ package mb;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
-import model.Authentication;
-import model.User;
+import entity.Authentication;
+import entity.User;
+import javax.faces.bean.ManagedBean;
 import repository.AuthenticationRepository;
 import repository.UserRepository;
 
@@ -26,6 +24,7 @@ import repository.UserRepository;
  * @author fabri
  */
 @Named(value = "userMB")
+@ManagedBean
 @SessionScoped
 public class UserMB {
 
