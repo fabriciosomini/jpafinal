@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -14,9 +15,41 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/styles/style.css" type="text/css" />
 
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>       
     </h:head>
     <h:body>
+        <script>
+            $(function () {
+                $("[data-toggle=popover]").popover({
+                    html: true,
+                    content: function () {
+                        var content = $(this).attr("data-content");
+                        return $('.popover-body').html();
+                    },
+                    title: function () {
+                        var title = $(this).attr("data-popover-content");
+                        return $(title).children(".popover-heading").html();
+                    }
+                });
+            });
+        </script>
+
+        <!-- #################################### DIV POPOVER DE NOTIFICAÇÕES #################################### -->
+
+        <div class="popover-body" style="display: none;">
+            <h:form>
+                <ul>
+                    <c:forEach var="notification" items="#{notificationMB.notifications}">
+                        <li><p:commandLink action="signup.xhtml?faces-redirect=true" value="#{notification.description}" /></li>
+                    </c:forEach>
+                </ul>
+            </h:form>
+        </div>
+
+        <!-- #################################### DIV POPOVER DE NOTIFICAÇÕES #################################### -->
+
         <div class="jumbotron jumbotron-fluid img">
             <div class="container" align="center">
                 <h1 class="display-4">FreeLancer</h1>
@@ -28,10 +61,10 @@
             <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
                 <div class="row">
                     <div class="col-4">
-                        <p:inputText class="form-control" value="${userMB.user.email}" pt:placeholder="E-mail" />
+                        <p:inputText class="form-control" value="#{userMB.user.email}" pt:placeholder="E-mail" />
                     </div>
                     <div class="col-2">
-                        <p:password class="form-control" value="${userMB.user.password}" pt:placeholder="Senha" />
+                        <p:password class="form-control" value="#{userMB.user.password}" pt:placeholder="Senha" />
                     </div>
 
                     <div class="col-1">
@@ -64,7 +97,9 @@
             <div class="row row-spaced" style="margin-bottom: -0.5rem;">
                 <div class="col" align="center">
                     <h3 style="display: inline;">Lista de trabalhos</h3>
-                    <p:commandButton class="btn-notification" value="5" rendered="#{userMB.isAuthorized()}" />
+                    <a href="#" data-toggle="popover" title="Notificações" data-placement="bottom" data-content="" style="float: right;">
+                        <p:commandButton class="btn-notification" value="5" rendered="#{userMB.isAuthorized()}" />
+                    </a>                   
                 </div>
             </div>
 
@@ -112,7 +147,7 @@
                     <p>Autores: Fabricio M. Somini e Guilherme C. Milak</p>
                 </div>
             </div>
-        </div>
+        </div>        
     </h:body>
 </html>
 
