@@ -23,22 +23,22 @@ import repository.NotificationRepository;
 @Named(value = "notificationMB")
 @Dependent
 public class NotificationMB {
-    private static NotificationMB notificationMB;
+    private static NotificationMB INSTANCE;
     private List<Notification> notifications;
 
     @PostConstruct
     public void init() {
-        notificationMB = this;
+        INSTANCE = this;
         User currentUser = UserMB.getInstance().getUser();
         notifications = NotificationRepository.getNotifications(currentUser);
     }
     
-    public static NotificationMB getNotificationMB() {
-        return notificationMB;
+    public static NotificationMB getINSTANCE() {
+        return INSTANCE;
     }
 
     public static NotificationMB getInstance() {
-        return notificationMB;
+        return INSTANCE;
     }
    
     public List<Notification> getNotifications() {
