@@ -14,12 +14,12 @@ import javax.persistence.Id;
  *
  * @author fabri
  */
-
 @Entity
 public class Job implements Serializable {
 
     @Id
     private int id;
+    private String title;
     private String description;
     private float amountPerHour;
     private User hirer;
@@ -56,13 +56,21 @@ public class Job implements Serializable {
     public void setHirer(User hirer) {
         this.hirer = hirer;
     }
-    
+
     public List<User> getHirees() {
         return hirees;
     }
 
     public void addHirees(User hiree) {
         this.hirees.add(hiree);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }
