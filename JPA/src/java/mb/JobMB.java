@@ -23,6 +23,15 @@ import model.User;
 public class JobMB {
 
     private List<Job> jobs;
+    private Job job;
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
     public List<Job> getJobs() {
         return jobs;
@@ -49,6 +58,12 @@ public class JobMB {
         });
         User hirer = job.getHirer();
         NotificationMB.getInstance().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
+    }
+    
+    
+    public boolean isJobMine(){
+        //TODO: pegar do banco
+        return true;
     }
 
     private void generateMemoryData() {
