@@ -23,7 +23,7 @@ public class NotificationRepository {
     public static List<Notification> getNotifications(User currentUser) {
         //TODO: pegar do banco
         
-        return new ArrayList();
+        return new ArrayList<>();
     }
     
 }
