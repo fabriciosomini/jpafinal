@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -24,13 +25,39 @@
             </div>
         </div>
         <div class="container">
-            <div class="row">
-                <div class="col-8"><p:outputLabel value="Olá, #{userMB.user.firstName}!" /></div>
-                <div class="col-2">
-                    <p:commandButton class="btn-block btn-success" value="Entrar" rendered="#{!userMB.isAuthorized()}" />
+            <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
+                <div class="row">
+                    <div class="col-4">
+                        <p:inputText class="form-control" value="${userMB.user.email}" pt:placeholder="E-mail" />
+                    </div>
+                    <div class="col-2">
+                        <p:password class="form-control" value="${userMB.user.password}" pt:placeholder="Senha" />
+                    </div>
+
+                    <div class="col-1">
+                        <p:commandButton class="btn-success" value="Entrar" actionListener="#{userMB.login()}" />
+                    </div>
+
+                    <div class="col-1"></div>
+
+                    <div class="col-4" style="text-align: right;">
+                        <p style="display: inline;">Não possui uma conta? </p>
+                        <p:commandButton class="btn-primary" value="Cadastre-se" action="signup.xhtml?faces-redirect=true" />
+                    </div>
                 </div>
-                <div class="col-2">                    
-                    <p:commandButton class="btn-block btn-primary" value="Cadastrar" action="signup.xhtml?faces-redirect=true" rendered="#{!userMB.isAuthorized()}" />
+            </h:panelGroup>
+
+            <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
+                <div class="row">
+                    <div class="col">
+                        <p:outputLabel value="Olá, ${userMB.user.firstName}!" />
+                    </div>
+                </div>
+            </h:panelGroup>
+
+            <div class="row" style="margin-bottom: -0.5rem;">
+                <div class="col">
+                    <hr />
                 </div>
             </div>
 
