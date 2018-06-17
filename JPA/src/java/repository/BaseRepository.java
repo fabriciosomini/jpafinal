@@ -7,8 +7,12 @@ package repository;
 
 import app.JPA;
 import entity.BaseModel;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
@@ -21,41 +25,74 @@ import test.TestModel;
  */
 public class BaseRepository<T extends BaseModel> {
 
+    private List<T> items;
     private String tableName = "";
     private Class<T> type;
 
     protected void init(Class<T> type) {
         this.type = type;
         tableName = type.getSimpleName();
-
+        items = new ArrayList<>();
     }
 
     public void insert(T object) {
-        EntityManager em = JPA.getEM();
+        /*EntityManager em = JPA.getEM();
         EntityTransaction t = em.getTransaction();
         t.begin();
         em.merge(object);
-        t.commit();
+        t.commit();*/
+
+        int index = items.indexOf(object);
+        if (index == -1) {
+            items.add(object);
+        } else {
+            items.set(index, object);
+        }
+
     }
 
     public void delete(T object) {
-        EntityManager em = JPA.getEM();
+        /*EntityManager em = JPA.getEM();
         EntityTransaction t = em.getTransaction();
         t.begin();
         em.remove(em.find(TestModel.class, object.getId()));
-        t.commit();
+        t.commit();*/
+
+        items.remove(object);
     }
 
     public List<T> get(String key, String value) {
-        EntityManager em = JPA.getEM();
+        /* EntityManager em = JPA.getEM();
         String queryString = "select x from " + tableName + " x where x." + key + " like :" + value;
         TypedQuery<T> query = em.createQuery(queryString, type);
-        return query.getResultList();
+        return query.getResultList();*/
+
+        List<T> queryResult = new ArrayList<>();
+        for (T item : items) {
+            for (Field field : type.getDeclaredFields()) {
+                try {
+                    if (field.getName().equals(key)) {
+                        Object v = (Object) field.get(item);
+                        if (v.equals(value)) {
+                            queryResult.add(item);
+                            break;
+                        }
+                    }
+
+                } catch (IllegalArgumentException ex) {
+
+                } catch (IllegalAccessException ex) {
+
+                }
+            }
+        }
+
+        return queryResult;
     }
 
     public List<T> get(Map<String, Object> params) {
 
-        String queryString = "select x from " + tableName;
+        /*String queryString = "select x from " + tableName;
 
         int i = 0;
         for (Map.Entry<String, Object> entry : params.entrySet()) {
@@ -73,13 +110,44 @@ public class BaseRepository<T extends BaseModel> {
 
         EntityManager em = JPA.getEM();
         TypedQuery<T> query = em.createQuery(queryString, type);
-        return query.getResultList();
+        return query.getResultList();*/
+        int paramsCount = params.size();
+        int matchedParams = 0;
+        List<T> queryResult = new ArrayList<>();
+        for (T item : items) {
+            for (Field field : type.getDeclaredFields()) {
+                try {
+                     for (Map.Entry<String, Object> entry : params.entrySet()) {
+                        
+                         String key = entry.getKey();
+                         String value = (String)entry.getValue();
+                        if (field.getName().equals(key)) {
+                            Object v = (Object) field.get(item);
+                            if (v.equals(value)) {
+                                queryResult.add(item);
+                                break;
+                            }
+                        }
+                    }
+
+                } catch (IllegalArgumentException ex) {
+
+                } catch (IllegalAccessException ex) {
+
+                }
+            }
+        }
+
+        return queryResult;
+
     }
 
     public List<T> getAll() {
-        EntityManager em = JPA.getEM();
+        /*EntityManager em = JPA.getEM();
         String queryString = "select X from " + tableName + " x";
         TypedQuery<T> result = em.createQuery(queryString, type);
-        return result.getResultList();
+        return result.getResultList();*/
+
+        return items;
     }
 }

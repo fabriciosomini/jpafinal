@@ -47,7 +47,7 @@ public class JobMB {
     public void init() {
         jobs = new ArrayList();
 
-        generateMemoryData();
+        //generateMemoryData();
 
     }
 
@@ -68,7 +68,7 @@ public class JobMB {
         return true;
     }
 
-    private void generateMemoryData() {
+    /*private void generateMemoryData() {
 
         String email = "fabricio.somini@gmail.com";
         String firstName = "Fabricio";
@@ -93,7 +93,7 @@ public class JobMB {
         job.setAmountPerHour(amountPerHour);
         job.setHirer(hirer);
         jobs.add(job);
-    }
+    }*/
     
     public void acceptHiree(User hiree){
         
