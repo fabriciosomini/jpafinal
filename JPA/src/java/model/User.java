@@ -14,23 +14,15 @@ import javax.persistence.Id;
  * @author fabri
  */
 @Entity
-public class User implements Serializable {
+public class User extends BaseModel{
 
-    @Id
-    private int id;
     private String firstName;
     private String lastName;
     private String nationalIdentity;
     private String email;
     private String password;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;

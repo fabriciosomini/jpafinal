@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.faces.bean.SessionScoped;
 import model.Notification;
 import model.NotificationType;
 import model.User;
@@ -21,26 +22,25 @@ import repository.NotificationRepository;
  * @author fabri
  */
 @Named(value = "notificationMB")
-@Dependent
+@SessionScoped
 public class NotificationMB {
     private static NotificationMB INSTANCE;
     private List<Notification> notifications;
+    private NotificationRepository notificationRepository;
 
     @PostConstruct
     public void init() {
         INSTANCE = this;
-        User currentUser = UserMB.getInstance().getUser();
-        notifications = NotificationRepository.getNotifications(currentUser);
+        User currentUser = UserMB.getINSTANCE().getUser();
+        String  userId = String.valueOf(currentUser.getId());
+        notificationRepository = new NotificationRepository();
+        notifications = notificationRepository.get("id", userId);
     }
     
     public static NotificationMB getINSTANCE() {
         return INSTANCE;
     }
 
-    public static NotificationMB getInstance() {
-        return INSTANCE;
-    }
-   
     public List<Notification> getNotifications() {
         return notifications;
     }
@@ -51,7 +51,7 @@ public class NotificationMB {
     public void generateNotification(NotificationType notificationType, User hirer, User hiree) {
 
         Notification notification = NotificationHelper.generate(notificationType, hirer, hiree);
-        NotificationRepository.insertNotification(notification);
+        notificationRepository.insert(notification);
 
     }
     

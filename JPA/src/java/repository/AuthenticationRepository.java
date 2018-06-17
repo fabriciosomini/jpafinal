@@ -5,19 +5,20 @@
  */
 package repository;
 
-import java.util.ArrayList;
+import app.JPA;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import model.Authentication;
 import model.Notification;
-import model.User;
 
 /**
  *
  * @author fabri
  */
-public class NotificationRepository extends BaseRepository<Notification> {
+public class AuthenticationRepository extends BaseRepository<Authentication> {
 
-    public  NotificationRepository () {
-        init(Notification.class);     
-    } 
-    
+    public AuthenticationRepository() {
+        init(Authentication.class);
+    }
 }

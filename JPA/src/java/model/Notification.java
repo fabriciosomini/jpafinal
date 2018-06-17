@@ -14,7 +14,7 @@ import javax.persistence.Id;
  * @author fabri
  */
 @Entity
-public class Notification implements Serializable {
+public class Notification extends BaseModel{
 
     @Id
     private int id;

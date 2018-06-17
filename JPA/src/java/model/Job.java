@@ -15,24 +15,24 @@ import javax.persistence.Id;
  * @author fabri
  */
 @Entity
-public class Job implements Serializable {
+public class Job extends BaseModel{
 
-    @Id
-    private int id;
     private String title;
     private String description;
     private float amountPerHour;
     private User hirer;
+    private User acceptedHiree;
+
+    public User getAcceptedHiree() {
+        return acceptedHiree;
+    }
+
+    public void setAcceptedHiree(User acceptedHiree) {
+        this.acceptedHiree = acceptedHiree;
+    }
     private List<User> hirees;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public String getDescription() {
         return description;
     }

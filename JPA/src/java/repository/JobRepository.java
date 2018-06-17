@@ -5,10 +5,15 @@
  */
 package repository;
 
+import model.Job;
+import model.Notification;
+
 /**
  *
  * @author fabri
  */
-public class JobRepository {
-    
+public class JobRepository extends BaseRepository<Job>{
+     public  JobRepository () {
+        init(Job.class);     
+    } 
 }

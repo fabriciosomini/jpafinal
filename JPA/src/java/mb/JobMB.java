@@ -9,17 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import model.Job;
 import model.NotificationType;
 import model.User;
+import repository.JobRepository;
 
 /**
  *
  * @author fabri
  */
 @Named(value = "jobMB")
-@Dependent
+@SessionScoped
 public class JobMB {
 
     private List<Job> jobs;
@@ -50,14 +52,14 @@ public class JobMB {
     }
 
     public void addJobRequest(Job job) {
-        User currentUser = UserMB.getInstance().getUser();
+        User currentUser = UserMB.getINSTANCE().getUser();
         jobs.stream().forEach(p -> {
             if (p.getId() == job.getId()) {
                 p.addHirees(currentUser);
             }
         });
         User hirer = job.getHirer();
-        NotificationMB.getInstance().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
     }
     
     
@@ -91,6 +93,10 @@ public class JobMB {
         job.setAmountPerHour(amountPerHour);
         job.setHirer(hirer);
         jobs.add(job);
+    }
+    
+    public void acceptHiree(User hiree){
+        
     }
 
 }

@@ -5,12 +5,23 @@
  */
 package model;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author fabri
  */
-public class Authentication {
+public class Authentication extends BaseModel{
     private String sessionId;
+    private LocalDate limitDate;
+
+    public LocalDate getLimitDate() {
+        return limitDate;
+    }
+
+    public void setLimitDate(LocalDate limitDate) {
+        this.limitDate = limitDate;
+    }
 
     public String getSessionId() {
         return sessionId;
