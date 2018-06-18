@@ -84,7 +84,7 @@ public class UserMB {
         String password = String.valueOf(user.getPassword());
 
         if (email != null && password != null) {
-            if (!email.isEmpty()) {
+            if (!email.isEmpty() && !password.isEmpty()) {
                 HashMap<String, Object> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", password);
@@ -99,22 +99,28 @@ public class UserMB {
                         String outcome = "index.xhtml";
                         FacesContext facesContext = FacesContext.getCurrentInstance();
                         facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, outcome);
-                       
+                        return;
+                    } else {
+                        throw new RuntimeException("Email ou senha incorretos");
                     }
+                } else {
+                    throw new RuntimeException("Usuário não encontrado");
                 }
+            } else {
+                throw new RuntimeException("Email e senha são requeridos");
             }
         }
 
     }
 
     public void signUp() {
-   
-        List<User> usersResult  = userRepository.get("email", user.getEmail());
-        
-        if(usersResult.size() > 0){
-             throw new RuntimeException("Usuário já existe, favor informar outro email");
+
+        List<User> usersResult = userRepository.get("email", user.getEmail());
+
+        if (usersResult.size() > 0) {
+            throw new RuntimeException("Usuário já existe, favor informar outro email");
         }
-        
+
         int result = userRepository.insert(user);
         String outcome = "";
         if (result == 0) {
@@ -124,7 +130,7 @@ public class UserMB {
             //TODO: adicionar mensagem para indicar falha na criação
             throw new RuntimeException("Falha ao criar usuário");
         }
-               
+
     }
 
 }
