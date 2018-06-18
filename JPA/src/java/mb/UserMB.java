@@ -15,8 +15,10 @@ import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import entity.Authentication;
 import entity.User;
+import helper.CookieHelper;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.Cookie;
 import repository.AuthenticationRepository;
 import repository.UserRepository;
 
@@ -41,7 +43,7 @@ public class UserMB {
         INSTANCE = this;
         user = new User();
         authentication = new Authentication();
-        authentication.setSessionId(sessionId);
+
         authenticationRepository = new AuthenticationRepository();
         userRepository = new UserRepository();
     }
@@ -59,19 +61,27 @@ public class UserMB {
     }
 
     public boolean isAuthorized() {
-        String JSESSIONID = authentication.getSessionId();
-        if (JSESSIONID != null) {
-            if (!JSESSIONID.isEmpty()) {
-                List<Authentication> authentications = authenticationRepository
-                        .get("sessionId", JSESSIONID);
-                if (authentications.size() > 0) {
-                    Authentication a = authentications.get(0);
-                    if (LocalDate.now().compareTo(a.getLimitDate()) < 0) {
+
+        CookieHelper cookieHelper = new CookieHelper();
+        Cookie cookie = cookieHelper.getCookie("JSESSIONID");
+        if (cookie != null) {
+            String JSESSIONID = cookie.getValue();
+            if (JSESSIONID != null) {
+                if (!JSESSIONID.isEmpty()) {
+                    List<Authentication> authentications = authenticationRepository
+                            .get("sessionId", JSESSIONID);
+                    if (authentications.size() > 0) {
+                        Authentication a = authentications.get(0);
+                        /*if (LocalDate.now().compareTo(a.getLimitDate()) < 0) {
+                        return true;
+                    }*/
+
                         return true;
                     }
                 }
             }
         }
+
         return false;
     }
 
@@ -79,7 +89,7 @@ public class UserMB {
         return user;
     }
 
-    public void login() {
+    public String login() {
         String email = String.valueOf(user.getEmail());
         String password = String.valueOf(user.getPassword());
 
@@ -93,13 +103,15 @@ public class UserMB {
                 if (users != null) {
                     if (users.size() > 0) {
                         user = users.get(0);
-                        LocalDate sessionLimitDate = LocalDate.now().plus(Duration.of(1, ChronoUnit.MINUTES));
-                        authentication.setLimitDate(sessionLimitDate);
+                        //LocalDate sessionLimitDate = LocalDate.now().plus(Duration.of(1, ChronoUnit.MINUTES));
+                        //authentication.setLimitDate(sessionLimitDate);
+                        authentication.setSessionId(sessionId);
                         authenticationRepository.insert(authentication);
                         String outcome = "index.xhtml";
                         FacesContext facesContext = FacesContext.getCurrentInstance();
                         facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, outcome);
-                        return;
+
+                        return outcome;
                     } else {
                         throw new RuntimeException("Email ou senha incorretos");
                     }
@@ -110,6 +122,8 @@ public class UserMB {
                 throw new RuntimeException("Email e senha são requeridos");
             }
         }
+        
+        return "";
 
     }
 

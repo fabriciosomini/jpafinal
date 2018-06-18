@@ -49,7 +49,7 @@ public class BaseRepository<T extends BaseModel> {
         } else {
             items.set(index, object);
             return 1;
-        }    
+        }
     }
 
     public int delete(T object) {
@@ -72,6 +72,7 @@ public class BaseRepository<T extends BaseModel> {
         List<T> queryResult = new ArrayList<>();
         for (T item : items) {
             for (Field field : type.getDeclaredFields()) {
+                field.setAccessible(true);
                 try {
                     if (field.getName().equals(key)) {
                         Object v = (Object) field.get(item);
@@ -116,28 +117,37 @@ public class BaseRepository<T extends BaseModel> {
         int paramsCount = params.size();
         int matchedParams = 0;
         List<T> queryResult = new ArrayList<>();
+        T result = null;
         for (T item : items) {
-            for (Field field : type.getDeclaredFields()) {
-                try {
-                     for (Map.Entry<String, Object> entry : params.entrySet()) {
-                        
-                         String key = entry.getKey();
-                         String value = (String)entry.getValue();
+
+            try {
+                for (Map.Entry<String, Object> entry : params.entrySet()) {
+
+                    String key = entry.getKey();
+                    String value = (String) entry.getValue();
+                    for (Field field : type.getDeclaredFields()) {
+                        field.setAccessible(true);
                         if (field.getName().equals(key)) {
                             Object v = (Object) field.get(item);
                             if (v.equals(value)) {
-                                queryResult.add(item);
+                                matchedParams++; 
+                                result = item;
                                 break;
                             }
                         }
                     }
-
-                } catch (IllegalArgumentException ex) {
-
-                } catch (IllegalAccessException ex) {
-
                 }
+
+            } catch (IllegalArgumentException ex) {
+
+            } catch (IllegalAccessException ex) {
+
             }
+
+        }
+        
+        if(matchedParams == paramsCount){
+            queryResult.add(result);
         }
 
         return queryResult;

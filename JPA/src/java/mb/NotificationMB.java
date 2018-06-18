@@ -5,6 +5,7 @@
  */
 package mb;
 
+import entity.Job;
 import helper.NotificationHelper;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.faces.bean.SessionScoped;
 import entity.Notification;
 import model.NotificationType;
 import entity.User;
+import java.util.HashMap;
 import javax.faces.bean.ManagedBean;
 import repository.NotificationRepository;
 
@@ -44,12 +46,19 @@ public class NotificationMB {
     }
 
     public List<Notification> getNotifications() {
-        if (notifications == null) {
+        if (notifications == null || notifications.isEmpty()) {
             UserMB userMB = UserMB.getINSTANCE();
             if (userMB != null) {
                 User currentUser = userMB.getUser();
                 String userId = String.valueOf(currentUser.getId());
-                notifications = notificationRepository.get("id", userId);
+                //TODO: Cuidado quando implementar o banco
+       
+                notifications = notificationRepository.get("hirerId", userId); 
+                notifications.addAll(notificationRepository.get("hireeId", userId));
+                Notification notification = new Notification();
+                notification.setDescription("VOCE MORREU");
+                notification.setJob(new Job());
+                notifications.add(notification);
             }
         }
         return notifications;

@@ -14,6 +14,7 @@ import entity.Job;
 import model.NotificationType;
 import entity.User;
 import javax.faces.bean.ManagedBean;
+import repository.JobRepository;
 
 /**
  *
@@ -26,6 +27,7 @@ public class JobMB {
 
     private List<Job> jobs;
     private Job job;
+    private JobRepository jobRepository;
 
     public Job getJob() {
         return job;
@@ -45,14 +47,15 @@ public class JobMB {
 
     @PostConstruct
     public void init() {
-        jobs = new ArrayList();
-
+        jobs = new ArrayList<>();
+        jobRepository = new JobRepository();
         //generateMemoryData();
 
     }
 
-    public void addJobRequest(Job job) {
+    public String addJobRequest(Job job) {
         User currentUser = UserMB.getINSTANCE().getUser();
+        
         jobs.stream().forEach(p -> {
             if (p.getId() == job.getId()) {
                 p.addHirees(currentUser);
@@ -60,10 +63,11 @@ public class JobMB {
         });
         User hirer = job.getHirer();
         NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
+        
+        return "index.xhtml?faces-redirect=true";
     }
-    
-    
-    public boolean isJobMine(){
+
+    public boolean isJobMine() {
         //TODO: pegar do banco
         return true;
     }
@@ -94,17 +98,25 @@ public class JobMB {
         job.setHirer(hirer);
         jobs.add(job);
     }*/
-    
-    public void acceptHiree(User hiree){
-        
+    public void acceptHiree(User hiree) {
+
     }
-    
-    public void edit(Job job){
+
+    public void edit(Job job) {
         this.job = job;
     }
-    
-    public void newJob(){
+
+    public void newJob() {
         job = new Job();
+    }
+
+    public void saveJob() {
+
+        User hirer = UserMB.getINSTANCE().getUser();
+        job.setHirer(hirer);
+        jobRepository.insert(job);
+        jobs = jobRepository.getAll();
+       
     }
 
 }

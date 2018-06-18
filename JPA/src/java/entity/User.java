@@ -30,8 +30,6 @@ public class User extends BaseModel{
     private String email;
     private String password;
 
-
-
     public String getFirstName() {
         return firstName;
     }

@@ -110,7 +110,7 @@
                 <div class="col" align="center">                    
                     <h3 style="display: inline;">Lista de trabalhos</h3>
                     <a href="#" data-toggle="popover" title="Notificações" data-placement="bottom" data-content="" style="float: right;">
-                        <p:commandButton class="btn-notification" value="5" rendered="#{userMB.isAuthorized()}" />
+                        <p:commandButton class="btn-notification" value="#{notificationMB.notifications.size()}" rendered="#{userMB.isAuthorized()}" />
                     </a>                              
                 </div>
             </div>
@@ -139,7 +139,7 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">Contratante</f:facet>
-                                <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
+                                <h:outputText value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}" />
                             </p:column>
                             <p:column>
                                 <p:commandButton class="btn-primary" value="Candidatar-se" actionListener="#{jobMB.addJobRequest(job)}" rendered="#{userMB.isAuthorized()}" />

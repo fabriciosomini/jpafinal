@@ -96,7 +96,7 @@
                         <div class="col-6"></div>
                         <div class="col-3" align="right">
                             <h5 style="display: inline; line-height: 2rem;">Contratante: </h5>
-                            <p:outputLabel value="#{jobMB.job.hirer}"  />
+                            <p:outputLabel value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}"  />
                         </div>
                     </div>
 
@@ -153,7 +153,7 @@
                     </div>
                     <div class="col-9"></div>
                     <div class="col-2">
-                        <p:commandButton class="btn-success" value="Salvar trabalho" style="width: 100%;"/>
+                        <p:commandButton class="btn-success" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" style="width: 100%;" action="index.xhtml?faces-redirect=true"/>
                     </div>
                 </div>
             </h:form>

@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,7 +30,11 @@ public class Job extends BaseModel{
     private User hirer;
     @ManyToOne
     private User acceptedHiree;
-
+    private List<User> hirees;
+    
+    public Job(){
+        hirees = new ArrayList<>();
+    }
     public User getAcceptedHiree() {
         return acceptedHiree;
     }
@@ -37,7 +42,7 @@ public class Job extends BaseModel{
     public void setAcceptedHiree(User acceptedHiree) {
         this.acceptedHiree = acceptedHiree;
     }
-    private List<User> hirees;
+
 
     
     public String getDescription() {

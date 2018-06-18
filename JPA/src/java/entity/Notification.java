@@ -22,6 +22,11 @@ public class Notification extends BaseModel {
     private Job job;
     @ManyToOne
     private User hirer;
+    
+    //TODO
+    private int hirerId;
+    private int hireeId;
+    
     @ManyToOne
     private User hiree;
     private String description;
@@ -48,6 +53,9 @@ public class Notification extends BaseModel {
     }
 
     public void setHirer(User hirer) {
+        
+        //TODO: Remover
+        hirerId = hirer.getId();
         this.hirer = hirer;
     }
 
@@ -56,6 +64,8 @@ public class Notification extends BaseModel {
     }
 
     public void setHiree(User hiree) {
+      
+        hireeId = hiree.getId();
         this.hiree = hiree;
     }
 
