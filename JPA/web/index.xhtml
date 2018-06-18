@@ -87,11 +87,17 @@
             </h:panelGroup>
 
             <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
-                <div class="row">
-                    <div class="col">
-                        <p:outputLabel value="Olá, ${userMB.user.firstName}!" />
+                <h:form>
+                    <div class="row">
+                        <div class="col-3">
+                            <p:outputLabel value="Olá, ${userMB.user.firstName}!" />
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-3" align="center">
+                            <p:commandButton class="btn btn-block btn-primary" value="Criar novo trabalho" action="jobdetails.xhtml?faces-redirect=true" actionListener="#{jobMB.newJob()}" rendered="#{userMB.isAuthorized()}" />
+                        </div>
                     </div>
-                </div>
+                </h:form>
             </h:panelGroup>
 
             <div class="row" style="margin-bottom: -0.5rem;">
