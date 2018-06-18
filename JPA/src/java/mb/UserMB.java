@@ -16,6 +16,7 @@ import javax.inject.Named;
 import entity.Authentication;
 import entity.User;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import repository.AuthenticationRepository;
 import repository.UserRepository;
 
@@ -81,13 +82,13 @@ public class UserMB {
     public void login() {
         String email = String.valueOf(user.getEmail());
         String password = String.valueOf(user.getPassword());
-        
+
         if (email != null && password != null) {
             if (!email.isEmpty()) {
                 HashMap<String, Object> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", password);
-                
+
                 List<User> users = userRepository.get(params);
                 if (users != null) {
                     if (users.size() > 0) {
@@ -95,16 +96,35 @@ public class UserMB {
                         LocalDate sessionLimitDate = LocalDate.now().plus(Duration.of(1, ChronoUnit.MINUTES));
                         authentication.setLimitDate(sessionLimitDate);
                         authenticationRepository.insert(authentication);
+                        String outcome = "index.xhtml";
+                        FacesContext facesContext = FacesContext.getCurrentInstance();
+                        facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, outcome);
+                       
                     }
                 }
             }
         }
+
     }
 
-    public boolean signUp() {
-
-        //TODO: Retornar do banco
-        return true;
+    public void signUp() {
+   
+        List<User> usersResult  = userRepository.get("email", user.getEmail());
+        
+        if(usersResult.size() > 0){
+             throw new RuntimeException("Usuário já existe, favor informar outro email");
+        }
+        
+        int result = userRepository.insert(user);
+        String outcome = "";
+        if (result == 0) {
+            login();
+            return;
+        } else {
+            //TODO: adicionar mensagem para indicar falha na criação
+            throw new RuntimeException("Falha ao criar usuário");
+        }
+               
     }
 
 }

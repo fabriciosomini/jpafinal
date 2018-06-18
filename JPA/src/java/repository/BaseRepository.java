@@ -35,7 +35,7 @@ public class BaseRepository<T extends BaseModel> {
         items = new ArrayList<>();
     }
 
-    public void insert(T object) {
+    public int insert(T object) {
         /*EntityManager em = JPA.getEM();
         EntityTransaction t = em.getTransaction();
         t.begin();
@@ -45,13 +45,14 @@ public class BaseRepository<T extends BaseModel> {
         int index = items.indexOf(object);
         if (index == -1) {
             items.add(object);
+            return 0;
         } else {
             items.set(index, object);
-        }
-
+            return 1;
+        }    
     }
 
-    public void delete(T object) {
+    public int delete(T object) {
         /*EntityManager em = JPA.getEM();
         EntityTransaction t = em.getTransaction();
         t.begin();
@@ -59,6 +60,7 @@ public class BaseRepository<T extends BaseModel> {
         t.commit();*/
 
         items.remove(object);
+        return 1;
     }
 
     public List<T> get(String key, String value) {

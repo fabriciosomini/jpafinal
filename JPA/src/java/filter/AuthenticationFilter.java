@@ -27,9 +27,9 @@ import mb.UserMB;
  */
 
 
-public class AuthenticationFilter/* implements Filter*/ {
+public class AuthenticationFilter implements Filter{
 
-    /*private static final boolean debug = true;
+    private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -189,6 +189,6 @@ public class AuthenticationFilter/* implements Filter*/ {
 
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);
-    }*/
+    }
 
 }

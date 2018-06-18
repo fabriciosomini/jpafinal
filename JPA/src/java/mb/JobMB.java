@@ -102,5 +102,9 @@ public class JobMB {
     public void edit(Job job){
         this.job = job;
     }
+    
+    public void newJob(){
+        job = new Job();
+    }
 
 }
