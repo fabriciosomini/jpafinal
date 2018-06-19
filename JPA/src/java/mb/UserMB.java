@@ -89,7 +89,7 @@ public class UserMB {
         return user;
     }
 
-    public String login() {
+    public void login() {
         String email = String.valueOf(user.getEmail());
         String password = String.valueOf(user.getPassword());
 
@@ -107,11 +107,7 @@ public class UserMB {
                         //authentication.setLimitDate(sessionLimitDate);
                         authentication.setSessionId(sessionId);
                         authenticationRepository.insert(authentication);
-                        String outcome = "index.xhtml";
-                        FacesContext facesContext = FacesContext.getCurrentInstance();
-                        facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, outcome);
-
-                        return outcome;
+                       
                     } else {
                         throw new RuntimeException("Email ou senha incorretos");
                     }
@@ -122,8 +118,6 @@ public class UserMB {
                 throw new RuntimeException("Email e senha são requeridos");
             }
         }
-        
-        return "";
 
     }
 

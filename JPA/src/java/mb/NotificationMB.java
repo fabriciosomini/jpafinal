@@ -56,7 +56,7 @@ public class NotificationMB {
                 notifications = notificationRepository.get("hirerId", userId); 
                 notifications.addAll(notificationRepository.get("hireeId", userId));
                 Notification notification = new Notification();
-                notification.setDescription("VOCE MORREU");
+                notification.setDescription("Novo candidato para o trabalho");
                 notification.setJob(new Job());
                 notifications.add(notification);
             }

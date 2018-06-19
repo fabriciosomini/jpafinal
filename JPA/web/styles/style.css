@@ -27,6 +27,8 @@ body {
     border: none;
     border-radius: 50%;
     height: 45px;
+    width: 45px;
+    line-height: 45px;
     padding: 0 !important;
 }
 
