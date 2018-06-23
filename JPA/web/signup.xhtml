@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/styles/style.css" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet" />
-        
+
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
     </h:head>
     <h:body>
@@ -38,40 +38,47 @@
                 </div>
             </div>
 
-            <h:form>
+            <h:form id="form">
                 <div class="row row-spaced">
                     <div class="col">
-                        <p:inputText id="signup-name" class="form-control" pt:placeholder="Nome" value="#{userMB.user.firstName}" />
+                        <p:inputText label="Nome" id="signup-name"  class="form-control" pt:placeholder="Nome" value="#{userMB.user.firstName}" required="true"></p:inputText>
+                        <p:messages for="signup-name" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
                     </div>
                 </div>
                 <div class="row row-spaced">
                     <div class="col">
-                        <p:inputText id="signup-last-name" class="form-control" pt:placeholder="Sobrenome" value="#{userMB.user.lastName}" />
+                        <p:inputText id="signup-last-name" label="Sobrenome" class="form-control" pt:placeholder="Sobrenome" value="#{userMB.user.lastName}" required="true" />
+                        <p:messages for="signup-last-name" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
                     </div>
                 </div>
                 <div class="row row-spaced">
                     <div class="col">
-                        <p:inputText id="signup-cpf" class="form-control" pt:placeholder="CPF" value="#{userMB.user.nationalIdentity}" />
+                        <p:inputText id="signup-cpf" label="CPF" class="form-control" pt:placeholder="CPF" value="#{userMB.user.nationalIdentity}" required="true"/>
+                        <p:messages for="signup-cpf" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
                     </div>
                 </div>
                 <div class="row row-spaced">
                     <div class="col">
-                        <p:inputText id="signup-email" class="form-control" pt:placeholder="E-mail" value="#{userMB.user.email}" />
+                        <p:inputText id="signup-email" label="E-mail" class="form-control" pt:placeholder="E-mail" value="#{userMB.user.email}" required="true"/>
+                        <p:messages for="signup-email" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
                     </div>
                 </div>
                 <div class="row row-spaced">
                     <div class="col">
-                        <p:password id="signup-pass" class="form-control" pt:placeholder="Senha" value="#{userMB.user.password}" />
+                        <p:password id="signup-pass" label="Senha" class="form-control" pt:placeholder="Senha" value="#{userMB.user.password}" required="true"/>
+                        <p:messages for="signup-pass" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
                     </div>
                 </div>
-
+                <h:panelGroup id="messages">
+                    <p:messages globalOnly="true" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
+                </h:panelGroup>
                 <div class="row row-spaced">
                     <div class="col-2">
                         <p:commandButton class="btn-block btn-primary" value="Voltar" action="index.xhtml?faces-redirect=true" />
                     </div>
                     <div class="col-8"></div>
                     <div class="col-2">
-                        <p:commandButton class="btn-block btn-success" value="Cadastrar" actionListener="#{userMB.signUp()}" action="index.xhtml?faces-redirect=true"  />
+                        <p:commandButton class="btn-block btn-success" value="Cadastrar" actionListener="#{userMB.signUp()}"/>
                     </div>
                 </div>
             </h:form>            

@@ -45,11 +45,15 @@ public class BaseRepository<T extends BaseModel> {
         int index = items.indexOf(object);
         if (index == -1) {
             items.add(object);
+            object = ((T)new BaseModel());
             return 0;
         } else {
             items.set(index, object);
+            object = ((T)new BaseModel());
             return 1;
         }
+        
+        
     }
 
     public int delete(T object) {

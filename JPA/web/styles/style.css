@@ -79,3 +79,23 @@ ul{
     box-shadow: none;
     color: black !important;
 }
+
+.validation-message{
+    color: 'red';
+    font-size: 12px;
+    width: 400px;
+}
+
+div.ui-messages-error{
+    height: 15px;
+    background: transparent;
+    border: none;
+    margin-top: -5px;
+    margin-left: -15px;
+    margin-bottom: 10px;
+
+}
+
+span.ui-messages-error-summary{
+    font-weight: 500;
+}

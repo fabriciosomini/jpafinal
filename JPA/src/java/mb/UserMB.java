@@ -16,6 +16,8 @@ import javax.inject.Named;
 import entity.Authentication;
 import entity.User;
 import helper.CookieHelper;
+import helper.MessageHelper;
+import helper.NavigationHelper;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -107,17 +109,15 @@ public class UserMB {
                         //authentication.setLimitDate(sessionLimitDate);
                         authentication.setSessionId(sessionId);
                         authenticationRepository.insert(authentication);
-                       
-                    } else {
-                        throw new RuntimeException("Email ou senha incorretos");
+                        NavigationHelper.navigate("index.xhtml?faces-redirect=true");
                     }
                 } else {
-                    throw new RuntimeException("Usuário não encontrado");
+                    MessageHelper.addMessage("Usuário não encontrado");
                 }
-            } else {
-                throw new RuntimeException("Email e senha são requeridos");
             }
         }
+
+        MessageHelper.addMessage("Email ou senha incorretos");
 
     }
 
@@ -126,19 +126,16 @@ public class UserMB {
         List<User> usersResult = userRepository.get("email", user.getEmail());
 
         if (usersResult.size() > 0) {
-            throw new RuntimeException("Usuário já existe, favor informar outro email");
-        }
-
-        int result = userRepository.insert(user);
-        String outcome = "";
-        if (result == 0) {
-            login();
-            return;
+            MessageHelper.addMessage("Usuário já existe, favor informar outro email");
         } else {
-            //TODO: adicionar mensagem para indicar falha na criação
-            throw new RuntimeException("Falha ao criar usuário");
+            int result = userRepository.insert(user);
+            String outcome = "";
+            if (result == 0) {
+                login();
+            } else {
+                MessageHelper.addMessage("Houve um erro ao criar seu usuário. "
+                        + "Tente novamente");
+            }
         }
-
     }
-
 }
