@@ -32,8 +32,18 @@
                 <ul>
                     <h:panelGroup rendered="#{notificationMB.isEmpty()}">Não há notificações</h:panelGroup>
                     <c:forEach var="notification" items="#{notificationMB.notifications}">
-                        <li><p:commandLink  actionListener="#{jobMB.edit(notification.job)}"
-                                            value="#{notification.description}" ajax="false"/></li>
+                        <li><div class="row">
+                                <div class="col-10">
+                                    <p:commandLink  actionListener="#{jobMB.edit(notification.job)}"
+                                                    value="#{notification.description}" ajax="false"/>
+                                </div>
+                                <div class="col-1">
+                                    <p:commandLink class="close" ajax="false" actionListener="#{notificationMB.removeNotification(notification)}">&times;
+                                    </p:commandLink>
+                                </div>
+                            </div>
+                        </li>
+                        <hr></hr>
                     </c:forEach>
                 </ul>
             </h:form>

@@ -78,8 +78,9 @@ public class NotificationMB extends BaseMB {
 
     }
 
-    public String removeNotification() {
-        return "";
+    public void removeNotification(Notification notification) {
+        NotificationRepository.delete(notification);
+        notifications = NotificationRepository.getAll();
     }
 
     public int notificationCount() {
@@ -89,6 +90,6 @@ public class NotificationMB extends BaseMB {
 
     public boolean isEmpty() {
         verifyAuthorization();
-        return notifications.size() == 0;
+        return notifications.isEmpty();
     }
 }
