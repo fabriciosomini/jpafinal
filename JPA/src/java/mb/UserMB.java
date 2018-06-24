@@ -16,10 +16,13 @@ import javax.inject.Named;
 import entity.Authentication;
 import entity.Job;
 import entity.User;
-import helper.CookieHelper;
+import helper.SessionHelper;
+import helper.IdHelper;
 import helper.MessageHelper;
 import helper.NavigationHelper;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import repository.AuthenticationRepository;
@@ -37,12 +40,13 @@ public class UserMB {
     private static UserMB INSTANCE;
     private User user;
     private Authentication authentication;
+    private String tokenName = "AUTHTOKEN";
 
     @PostConstruct
     public void init() {
         INSTANCE = this;
-        user = new User();
         authentication = new Authentication();
+        user = new User();
 
     }
 
@@ -54,22 +58,8 @@ public class UserMB {
         this.user = user;
     }
 
-    private String getCurrentSessionId() {
-        CookieHelper cookieHelper = new CookieHelper();
-        Cookie cookie = cookieHelper.getCookie("JSESSIONID");
-        String JSESSIONID = "";
-        if (cookie != null) {
-            JSESSIONID = cookie.getValue();
-
-        }
-
-        JSESSIONID = JSESSIONID == null ? "" : JSESSIONID;
-
-        return JSESSIONID;
-    }
-
     public boolean isAuthorized() {
-        String sessionId = getCurrentSessionId();
+        String sessionId = SessionHelper.getSessionId();
         if (!sessionId.isEmpty()) {
             List<Authentication> authentications = AuthenticationRepository
                     .get("sessionId", sessionId);
@@ -85,6 +75,13 @@ public class UserMB {
     }
 
     public User getUser() {
+        if(isAuthorized()){
+            String sessionId = SessionHelper.getSessionId();
+            List<Authentication> authentications = AuthenticationRepository.get("sessionId", sessionId);
+            if(authentications.size()>0){
+                user = authentications.get(0).getUser();
+            }
+        }
         return user;
     }
 
@@ -104,7 +101,8 @@ public class UserMB {
                         user = users.get(0);
                         //LocalDate sessionLimitDate = LocalDate.now().plus(Duration.of(1, ChronoUnit.MINUTES));
                         //authentication.setLimitDate(sessionLimitDate);
-                        String sessionId = getCurrentSessionId();
+                        String sessionId = SessionHelper.getSessionId();
+                        authentication.setUser(user);
                         authentication.setSessionId(sessionId);
                         AuthenticationRepository.insert(authentication);
                         NavigationHelper.navigate("index.xhtml?faces-redirect=true");
@@ -131,13 +129,15 @@ public class UserMB {
     }
 
     public void disconnect() {
-        String sessionId = getCurrentSessionId();
+        String sessionId = SessionHelper.getSessionId();
         List<Authentication> authentications = AuthenticationRepository.get("sessionId", sessionId);
         if (authentications.size() > 0) {
             authentication = authentications.get(0);
             AuthenticationRepository.delete(authentication);
             user = new User();
             authentication = new Authentication();
+            SessionHelper cookieHelper = new SessionHelper();
+
         }
 
     }
@@ -151,4 +151,5 @@ public class UserMB {
         user = new User();
         NavigationHelper.navigate("index.xhtml?faces-redirect=true");
     }
+
 }

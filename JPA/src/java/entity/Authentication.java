@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +28,12 @@ public class Authentication implements Serializable {
 
     private String sessionId;
     private LocalDate limitDate;
+    @ManyToOne
+    private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public LocalDate getLimitDate() {
         return limitDate;
@@ -61,5 +68,9 @@ public class Authentication implements Serializable {
     @Override
     public final int hashCode() {
         return IdHelper.generateId();
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -16,6 +16,7 @@ import entity.User;
 import helper.MessageHelper;
 import helper.NavigationHelper;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import repository.JobRepository;
 
 /**
@@ -55,7 +56,7 @@ public class JobMB extends BaseMB {
     public void init() {
        
         jobs = JobRepository.getAll();
-        job = new Job();
+        job = job == null? new Job() : job;
      
     }
 
@@ -83,7 +84,7 @@ public class JobMB extends BaseMB {
         verifyAuthorization();
         User currentUser = UserMB.getINSTANCE().getUser();
         User hirer = job.getHirer();
-        boolean isMine = hirer == null ? false : job.getHirer().equals(currentUser);
+        boolean isMine = job.getId() == 0? true: (hirer == null ? false : job.getHirer().equals(currentUser));
         return isMine;
     }
 

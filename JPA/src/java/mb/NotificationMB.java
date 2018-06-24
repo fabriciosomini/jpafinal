@@ -18,6 +18,7 @@ import model.NotificationType;
 import entity.User;
 import java.util.HashMap;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import repository.NotificationRepository;
 
 /**

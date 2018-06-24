@@ -24,6 +24,9 @@ import javax.persistence.Table;
 @Table(name = "USER")
 public class User implements Serializable {
 
+    @OneToMany(mappedBy = "user")
+    private List<Authentication> authentications;
+
     @ManyToOne
     private Job job;
 
