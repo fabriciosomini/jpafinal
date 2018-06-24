@@ -134,11 +134,13 @@ td{
 }
 
 button.btn-secondary{
-    
     background: grey;
 }
 
 li.list-group-item{
-    
     opacity: 100;
+}
+
+.min-width-150{
+    min-width: 155px;
 }

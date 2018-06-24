@@ -161,8 +161,8 @@
                                 <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
                             </p:column>
                             <p:column rendered="#{userMB.isAuthorized()}">
-                                <p:commandButton class="btn btn-success" 
-                                                 value="#{jobMB.isJobMine(job)? 'Candidatos: '.concat(jobMB.hireesCount(job)) : (jobMB.isJobRequestedByMe(job)? 'Aguarando reposta!' : 'Candidatar-se')}" 
+                                <p:commandButton class="btn btn-success min-width-150" 
+                                                 value="#{jobMB.isJobMine(job)? 'Candidatos: '.concat(jobMB.hireesCount(job)) : (jobMB.isJobRequestedByMe(job)? 'Em análise' : 'Candidatar-se')}" 
                                                  actionListener="#{jobMB.addJobRequest(job)}" 
                                                  rendered="#{userMB.isAuthorized()}" 
                                                  disabled="${jobMB.isJobRequestedByMe(job) or jobMB.isJobMine(job)}" />

@@ -90,7 +90,12 @@ public class JobMB extends BaseMB {
 
     public boolean isJobRequestedByMe(Job j) {
         User currentUser = UserMB.getINSTANCE().getUser();
-        return j.getHirees().contains(currentUser);
+        List<User> hirees = j.getHirees();
+        boolean isJobRequestedByMe = hirees
+                .stream()
+                .filter(h -> h.getId() == currentUser.getId())
+                .count() > 0;
+        return isJobRequestedByMe;
     }
 
     public boolean isJobMine(Job j) {
