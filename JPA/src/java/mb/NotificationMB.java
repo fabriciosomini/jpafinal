@@ -71,9 +71,9 @@ public class NotificationMB extends BaseMB {
         this.notifications = notifications;
     }
 
-    public void generateNotification(NotificationType notificationType, User hirer, User hiree) {
+    public void generateNotification(NotificationType notificationType, User hirer, User hiree, Job job) {
         verifyAuthorization();
-        Notification notification = NotificationHelper.generate(notificationType, hirer, hiree);
+        Notification notification = NotificationHelper.generate(notificationType, hirer, hiree, job);
         NotificationRepository.insert(notification);
 
     }

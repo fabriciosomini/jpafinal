@@ -40,6 +40,10 @@ public class JobRepository {
         }
         object = null;
     }
+    public static void update(Job object) {
+
+        insert(object);
+    }
 
     public static void delete(Job object) {
         EntityManager em = JPA.getEM();

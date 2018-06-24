@@ -78,20 +78,20 @@
             </div>
 
             <h:form>
-                <h:panelGroup id="pg-job-edit" rendered="#{jobMB.isJobMine()}">
+                <h:panelGroup id="pg-job-edit">
                     <div class="row row-spaced">
                         <div class="col">
-                            <p:inputText class="form-control" value="#{jobMB.job.title}" pt:placeholder="Título do trabalho" readonly="#{!jobMB.isJobMine()}"/>
+                            <p:inputText class="form-control" value="#{jobMB.job.title}" pt:placeholder="Título do trabalho" readonly="#{!jobMB.isJobMine(jobMB.job)}"/>
                         </div>
                     </div>
                     <div class="row row-spaced">
                         <div class="col">
-                            <p:inputTextarea class="form-control" value="#{jobMB.job.description}" pt:placeholder="Descrição do trabalho" readonly="#{!jobMB.isJobMine()}"/>
+                            <p:inputTextarea class="form-control" value="#{jobMB.job.description}" pt:placeholder="Descrição do trabalho" readonly="#{!jobMB.isJobMine(jobMB.job)}"/>
                         </div>
                     </div>
                     <div class="row row-spaced">
                         <div class="col-3">
-                            <p:inputText class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" readonly="#{!jobMB.isJobMine()}" />
+                            <p:inputText class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" readonly="#{!jobMB.isJobMine(jobMB.job)}" />
                         </div>
                         <div class="col-6"></div>
                         <div class="col-3" align="right">
@@ -133,7 +133,7 @@
                                     <h:outputText value="#{hire.email}" />
                                 </p:column>
                                 <p:column>
-                                    <p:commandButton class="btn btn-success" value="Contratar" actionListener="#{jobMB.acceptHire(hire)}" />
+                                    <p:commandButton class="btn btn-success" value="Contratar" actionListener="#{jobMB.acceptHiree(hire)}" />
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -146,11 +146,11 @@
 
                 <div class="row row-spaced">
                     <div class="col-2">
-                        <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{jobMB.back()}" immediate="true" />
+                        <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{jobMB.back()}" immediate="true" ajax="false" />
                     </div>
                     <div class="col-8"></div>
                     <div class="col-2">
-                        <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized()}"/>
+                        <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized() and jobMB.isJobMine()}"/>
                     </div>
                 </div>
 

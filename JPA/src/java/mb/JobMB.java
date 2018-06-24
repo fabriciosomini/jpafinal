@@ -31,7 +31,6 @@ public class JobMB extends BaseMB {
     private List<Job> jobs;
     private Job job;
 
-
     public Job getJob() {
         verifyAuthorization();
         return job;
@@ -44,6 +43,7 @@ public class JobMB extends BaseMB {
 
     public List<Job> getJobs() {
         verifyAuthorization();
+        jobs = JobRepository.getAll();
         return jobs;
     }
 
@@ -54,10 +54,10 @@ public class JobMB extends BaseMB {
 
     @PostConstruct
     public void init() {
-       
+
         jobs = JobRepository.getAll();
-        job = job == null? new Job() : job;
-     
+        job = job == null ? new Job() : job;
+
     }
 
     public void addJobRequest(Job job) {
@@ -67,36 +67,42 @@ public class JobMB extends BaseMB {
         } else {
             User currentUser = UserMB.getINSTANCE().getUser();
 
-            jobs.stream().forEach(p -> {
+            getJobs().stream().forEach(p -> {
                 if (p.getId() == job.getId()) {
                     p.addHirees(currentUser);
                 }
             });
+            JobRepository.update(job);
             User hirer = job.getHirer();
-            NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
+            NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED,
+                    hirer, currentUser, job);
             NavigationHelper.navigate("index.xhtml?faces-redirect=true");
 
         }
 
     }
 
-    public boolean isJobMine() {
+    public boolean isJobMine(Job j) {
         verifyAuthorization();
         User currentUser = UserMB.getINSTANCE().getUser();
-        User hirer = job.getHirer();
-        boolean isMine = job.getId() == 0? true: (hirer == null ? false : job.getHirer().equals(currentUser));
+        User hirer = j.getHirer();
+        boolean isMine = j.getId() == 0 ? true : (hirer == null ? false : hirer.getId() == currentUser.getId());
         return isMine;
     }
 
     public void acceptHiree(User hiree) {
         verifyAuthorization();
         User hirer = UserMB.getINSTANCE().getUser();
-        NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ACCEPTED, hirer, hiree);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ACCEPTED,
+                hirer, hiree, job);
     }
 
     public void edit(Job job) {
         verifyAuthorization();
-        this.job = job;
+        if (UserMB.getINSTANCE().isAuthorized()) {
+            this.job = job;
+            NavigationHelper.navigate("jobdetails.xhtml?faces-redirect=true");
+        }
     }
 
     public void newJob() {
@@ -111,17 +117,19 @@ public class JobMB extends BaseMB {
         if (!UserMB.getINSTANCE().isAuthorized()) {
             MessageHelper.addMessage("Você precisa entrar para poder inserir um trabalho");
         } else {
-            User hirer = UserMB.getINSTANCE().getUser();
-            job.setHirer(hirer);
-            JobRepository.insert(job);
-            jobs = JobRepository.getAll();
-            job = new Job();
-            NavigationHelper.navigate("index.xhtml?faces-redirect=true");
+            if (isJobMine(job)) {
+                User hirer = UserMB.getINSTANCE().getUser();
+                job.setHirer(hirer);
+                JobRepository.insert(job);
+                jobs = JobRepository.getAll();
+                job = new Job();
+                NavigationHelper.navigate("index.xhtml?faces-redirect=true");
+            }
         }
 
     }
-    
-    public void back(){
+
+    public void back() {
         job = new Job();
         NavigationHelper.navigate("index.xhtml?faces-redirect=true");
     }

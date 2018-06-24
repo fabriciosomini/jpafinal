@@ -32,9 +32,8 @@
                 <ul>
                     <h:panelGroup rendered="#{notificationMB.isEmpty()}">Não há notificações</h:panelGroup>
                     <c:forEach var="notification" items="#{notificationMB.notifications}">
-                        <li><p:commandLink action="jobdetails.xhtml?faces-redirect=true"
-                                           actionListener="#{jobMB.edit(notification.job)}"
-                                           value="#{notification.description}" ajax="false"/></li>
+                        <li><p:commandLink  actionListener="#{jobMB.edit(notification.job)}"
+                                            value="#{notification.description}" ajax="false"/></li>
                     </c:forEach>
                 </ul>
             </h:form>
@@ -83,7 +82,7 @@
             </h:panelGroup>
 
             <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
-                <h:form>
+                <h:form id="form">
                     <div class="row">
                         <div class="col-3">
 
@@ -98,8 +97,8 @@
                                         <ul class="list-group">
                                             <li class="list-group-item">
                                                 <p:commandLink 
-                                                               actionListener="#{userMB.disconnect()}"
-                                                               value="Sair" ajax="false"/>
+                                                    actionListener="#{userMB.disconnect()}"
+                                                    value="Sair" ajax="false"/>
                                             </li>
                                         </ul>
                                     </div>
@@ -142,7 +141,7 @@
 
             <div class="row row-spaced">
                 <div class="col">
-                    <h:form id="form">
+                    <h:form>
                         <p:dataTable id="table-jobs" value="#{jobMB.jobs}" var="job" class="table table-bordered table-striped"
                                      rows="10"
                                      paginator="true"
@@ -162,7 +161,7 @@
                                 <h:outputText value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}" />
                             </p:column>
                             <p:column>
-                                <p:commandButton class="btn btn-success" value="Candidatar-se" actionListener="#{jobMB.addJobRequest(job)}" rendered="#{userMB.isAuthorized()}" />
+                                <p:commandButton class="btn btn-success" value="Candidatar-se" actionListener="#{jobMB.addJobRequest(job)}" rendered="#{userMB.isAuthorized()}" disabled="${jobMB.isJobMine(job)}" />
                             </p:column>
                         </p:dataTable>
                     </h:form>  

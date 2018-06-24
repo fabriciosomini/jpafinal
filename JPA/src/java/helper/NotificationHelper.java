@@ -5,6 +5,7 @@
  */
 package helper;
 
+import entity.Job;
 import entity.Notification;
 import model.NotificationType;
 import entity.User;
@@ -15,7 +16,7 @@ import entity.User;
  */
 public class NotificationHelper {
 
-    public static Notification generate(NotificationType noticationType, User hirer, User hiree) {
+    public static Notification generate(NotificationType noticationType, User hirer, User hiree, Job job) {
         Notification notification = new Notification();
         String description = "";
         
@@ -32,6 +33,7 @@ public class NotificationHelper {
         notification.setNotificationType(noticationType);
         notification.setHirer(hirer);
         notification.setHiree(hiree);
+        notification.setJob(job);
   
         return notification;
     }
