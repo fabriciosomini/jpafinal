@@ -196,4 +196,76 @@ public class JobMB extends BaseMB {
         NotificationMB.getINSTANCE().generateNotification(NotificationType.JOB_STARTED,
                 j.getHirer(), j.getAcceptedHiree(), job);
     }
+
+    public boolean isJobPersisted(Job j) {
+        return j.getId() != 0;
+    }
+
+    public String getJobStatus(Job j) {
+        JobStatusType status = j.getJobStatusType();
+        if (status == null) {
+            status = JobStatusType.NOT_STARTED;
+        }
+        String jobStatus = "";
+        switch (status) {
+            case NOT_STARTED:
+                jobStatus = "Trabalho não iniciado";
+                break;
+            case CANCELED_BY_HIREE:
+                jobStatus = "Trabalho cancelado pelo(a) contradador(a)";
+                break;
+            case CANCELED_BY_HIRER:
+                jobStatus = "Trabalho cancelado pelo(a) contratado(a)";
+                break;
+            case DONE:
+                jobStatus = "Trabalho concluído";
+                break;
+            case STARTED:
+                jobStatus = "Trabalho em progresso";
+                break;
+        }
+
+        return jobStatus;
+    }
+    
+    public String getButtonJobStatus(Job j) {
+        JobStatusType status = j.getJobStatusType();
+        if (status == null) {
+            status = JobStatusType.NOT_STARTED;
+        }
+        String jobStatus = "";
+        switch (status) {
+            case NOT_STARTED:
+                if(isJobAssigned(j)){
+                    jobStatus = "Não iniciado";
+                }else{
+                    jobStatus = "Cadastrar-se";
+                }
+                break;
+            case CANCELED_BY_HIREE:
+                jobStatus = "Cancelado";
+                break;
+            case CANCELED_BY_HIRER:
+                jobStatus = "Desistido";
+                break;
+            case DONE:
+                jobStatus = "Concluído";
+                break;
+            case STARTED:
+                jobStatus = "Em progresso";
+                break;
+        }
+
+        return jobStatus;
+    }
+
+    public boolean isJobAssigned(Job j) {
+        return j.getAcceptedHiree() != null;
+    }
+
+    public boolean isJobAssignedTo(User hiree, Job j) {
+        return j.getAcceptedHiree() != null
+                && j.getAcceptedHiree().getId() == hiree.getId();
+    }
+
 }

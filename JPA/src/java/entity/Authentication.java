@@ -25,22 +25,12 @@ public class Authentication implements Serializable {
     @Id
     @GeneratedValue
     private int id;
-
     private String sessionId;
-    private LocalDate limitDate;
     @ManyToOne
     private User user;
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public LocalDate getLimitDate() {
-        return limitDate;
-    }
-
-    public void setLimitDate(LocalDate limitDate) {
-        this.limitDate = limitDate;
     }
 
     public String getSessionId() {

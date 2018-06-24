@@ -66,9 +66,6 @@ public class UserMB {
                     .get("sessionId", sessionId);
             if (authentications.size() > 0) {
                 Authentication a = authentications.get(0);
-                /*if (LocalDate.now().compareTo(a.getLimitDate()) < 0) {
-                        return true;
-                    }*/
                 return true;
             }
         }
@@ -100,8 +97,6 @@ public class UserMB {
                 if (users != null) {
                     if (users.size() > 0) {
                         user = users.get(0);
-                        //LocalDate sessionLimitDate = LocalDate.now().plus(Duration.of(1, ChronoUnit.MINUTES));
-                        //authentication.setLimitDate(sessionLimitDate);
                         String sessionId = SessionHelper.getSessionId();
                         authentication.setUser(user);
                         authentication.setSessionId(sessionId);

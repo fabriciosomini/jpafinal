@@ -172,10 +172,10 @@
                             </p:column>
                             <p:column rendered="#{userMB.isAuthorized()}">
                                 <p:commandButton class="btn btn-success min-width-150" 
-                                                 value="#{jobMB.isJobMine(job)? 'Candidatos: '.concat(jobMB.hireesCount(job)) : (jobMB.isJobRequestedByMe(job)? 'Em análise' : 'Candidatar-se')}" 
+                                                 value="#{jobMB.isJobMine(job)? 'Candidatos: '.concat(jobMB.hireesCount(job)) : (jobMB.isJobRequestedByMe(job) and !jobMB.isJobAssigned(job) ? 'Em análise' : jobMB.getButtonJobStatus(job))}" 
                                                  actionListener="#{jobMB.addJobRequest(job)}" 
                                                  rendered="#{userMB.isAuthorized()}" 
-                                                 disabled="${jobMB.isJobRequestedByMe(job) or jobMB.isJobMine(job)}" />
+                                                 disabled="${jobMB.isJobRequestedByMe(job) or jobMB.isJobMine(job) or jobMB.isJobAssigned(job)}" />
                             </p:column>
                         </p:dataTable>
                     </h:form>  

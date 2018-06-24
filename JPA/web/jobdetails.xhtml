@@ -93,10 +93,17 @@
                         <div class="col-3">
                             <p:inputText class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" readonly="#{!jobMB.isJobMine(jobMB.job)}" />
                         </div>
-                        <div class="col-6"></div>
-                        <div class="col-3" align="right">
+                    </div>
+                    <div class="row row-spaced">
+                        <div class="col-3" >
                             <h5 style="display: inline; line-height: 2rem;">Contratante: </h5>
                             <p:outputLabel value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}"  />
+                        </div>
+                    </div>               
+                    <div class="row row-spaced">
+                        <div class="col-3" >
+                            <h5 style="display: inline; line-height: 2rem;">Status: </h5>
+                            <p:outputLabel value="#{jobMB.getJobStatus(jobMB.job)}"  />
                         </div>
                     </div>
 
@@ -133,7 +140,7 @@
                                     <h:outputText value="#{hiree.email}" />
                                 </p:column>
                                 <p:column rendered="#{jobMB.isJobMine(jobMB.job)}">
-                                    <p:commandButton class="btn btn-success" value="Contratar" actionListener="#{jobMB.acceptHiree(hiree)}" rendered="#{jobMB.isJobMine(jobMB.job)}"/>
+                                    <p:commandButton class="btn btn-success" value="#{jobMB.isJobAssigned(jobMB.job)? (jobMB.isJobAssignedTo(hiree, jobMB.job)? 'Contratado(a)': 'Não contratado(a)') : 'Contratar'}" actionListener="#{jobMB.acceptHiree(hiree)}" rendered="#{jobMB.isJobMine(jobMB.job)}" disabled="#{jobMB.isJobAssigned(jobMB.job)}"/>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -146,12 +153,22 @@
 
                 <div class="row row-spaced">
                     <div class="col-2">
-                        <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{jobMB.back()}" immediate="true" ajax="false" />
+                        <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{jobMB.back()}" immediate="true"/>
                     </div>
-                    <div class="col-8"></div>
+                    <div class="col-6"></div>
+                    <div class="col-2">
+                        <p:commandButton class="btn btn-block btn-secondary" value="Remover" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isJobMine(jobMB.job) and userMB.isAuthorized() and jobMB.isJobPersisted(jobMB.job)}"/>
+                        <p:commandButton class="btn btn-block btn-secondary" value="Desistir" actionListener="#{jobMB.setJobAsCanceledByHiree(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
+                    </div>
                     <div class="col-2">
                         <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized() and jobMB.isJobMine(jobMB.job)}"/>
                         <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
+                        <p:commandButton class="btn btn-success min-width-150" 
+                                         value="#{jobMB.isJobRequestedByMe(job)? 'Em análise' : 'Candidatar-se'}" 
+                                         actionListener="#{jobMB.addJobRequest(job)}" 
+                                         rendered="#{userMB.isAuthorized()}" 
+                                         disabled="${jobMB.isJobRequestedByMe(job) or jobMB.isJobMine(job)}" />
+
                     </div>
                 </div>
 
