@@ -22,10 +22,10 @@ public class NotificationHelper {
         
         switch (noticationType) {
             case REQUEST_ACCEPTED:
-               description = "O contratante aceitou seu pedido de trabalho, o  projeto é seu!";
+               description = "Pedido de trabalho aceito: "+ job.getTitle();
                 break;
             case REQUEST_ADDED:
-                description = "Há um novo candidato para o trabalho";
+                description = "Novo candidato para o trabalho: " + job.getTitle();
                 break;
   
         }

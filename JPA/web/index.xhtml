@@ -158,10 +158,14 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">Contratante</f:facet>
-                                <h:outputText value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}" />
+                                <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
                             </p:column>
-                            <p:column>
-                                <p:commandButton class="btn btn-success" value="Candidatar-se" actionListener="#{jobMB.addJobRequest(job)}" rendered="#{userMB.isAuthorized()}" disabled="${jobMB.isJobMine(job)}" />
+                            <p:column rendered="#{userMB.isAuthorized()}">
+                                <p:commandButton class="btn btn-success" 
+                                                 value="#{jobMB.isJobMine(job)? 'Candidatos: '.concat(jobMB.hireesCount(job)) : (jobMB.isJobRequestedByMe(job)? 'Aguarando reposta!' : 'Candidatar-se')}" 
+                                                 actionListener="#{jobMB.addJobRequest(job)}" 
+                                                 rendered="#{userMB.isAuthorized()}" 
+                                                 disabled="${jobMB.isJobRequestedByMe(job) or jobMB.isJobMine(job)}" />
                             </p:column>
                         </p:dataTable>
                     </h:form>  

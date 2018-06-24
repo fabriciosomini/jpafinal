@@ -65,21 +65,32 @@ public class JobMB extends BaseMB {
         if (!UserMB.getINSTANCE().isAuthorized()) {
             MessageHelper.addMessage("Você precisa entrar para poder inserir um trabalho");
         } else {
-            User currentUser = UserMB.getINSTANCE().getUser();
+            if (!isJobRequestedByMe(job)) {
+                User currentUser = UserMB.getINSTANCE().getUser();
+                jobs = JobRepository.getAll();
+                jobs.stream().forEach(j -> {
+                    if (j.getId() == job.getId()) {
+                        if (!job.getHirees().contains(currentUser)) {
+                            job.addHirees(currentUser);
+                        }
+                    }
+                });
+                JobRepository.update(job);
+                User hirer = job.getHirer();
+                NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED,
+                        hirer, currentUser, job);
+                jobs = JobRepository.getAll();
+                NavigationHelper.navigate("index.xhtml?faces-redirect=true");
 
-            getJobs().stream().forEach(p -> {
-                if (p.getId() == job.getId()) {
-                    p.addHirees(currentUser);
-                }
-            });
-            JobRepository.update(job);
-            User hirer = job.getHirer();
-            NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED,
-                    hirer, currentUser, job);
-            NavigationHelper.navigate("index.xhtml?faces-redirect=true");
+            }
 
         }
 
+    }
+
+    public boolean isJobRequestedByMe(Job j) {
+        User currentUser = UserMB.getINSTANCE().getUser();
+        return j.getHirees().contains(currentUser);
     }
 
     public boolean isJobMine(Job j) {
@@ -134,4 +145,7 @@ public class JobMB extends BaseMB {
         NavigationHelper.navigate("index.xhtml?faces-redirect=true");
     }
 
+    public int hireesCount(Job j) {
+        return j.getHirees().size();
+    }
 }
