@@ -99,3 +99,17 @@ div.ui-messages-error{
 span.ui-messages-error-summary{
     font-weight: 500;
 }
+body {
+    -moz-transform: scale(0.8, 0.8); /* Moz-browsers */
+    zoom: 0.8; /* Other non-webkit browsers */
+    zoom: 80%; /* Webkit browsers */
+}
+
+.label-side-margin{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.label-inline{
+    display: inline;
+}
+.jumbotron {  background-size: cover; }

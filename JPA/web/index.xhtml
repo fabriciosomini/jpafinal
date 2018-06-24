@@ -4,6 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
@@ -19,9 +20,10 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>       
+
     </h:head>
     <h:body>
-        <script>
+            <script>
             $(function () {
                 $("[data-toggle=popover]").popover({
                     html: true,
@@ -79,7 +81,7 @@
 
                     <div class="col-4" style="text-align: right;">
                         <h:form>
-                            <p style="display: inline;">Não possui uma conta? </p>                         
+                            <p class="label-inline label-side-margin">Não possui uma conta?</p>                         
                             <p:commandButton class="btn-primary" value="Cadastre-se" action="signup.xhtml?faces-redirect=true" /> 
                         </h:form>
                     </div>
@@ -129,7 +131,7 @@
             <div class="row row-spaced">
                 <div class="col">
                     <h:form>
-                        <p:dataTable id="table-jobs" value="#{jobMB.jobs}" var="job" styleClass="table table-bordered table-striped"
+                        <p:dataTable id="table-jobs" value="#{jobMB.jobs}" var="job" class="table table-bordered table-striped"
                                      rows="10"
                                      paginator="true"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
