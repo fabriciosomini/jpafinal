@@ -15,6 +15,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
+import model.MultiMap;
+import model.MultiMap.MultiEntry;
 
 /**
  *
@@ -71,25 +73,43 @@ public class NotificationRepository {
         return result;
     }
 
-    public static List<Notification> get(Map<String, Object> params) {
+    public static List<Notification> get(MultiMap<String, Object> params) {
 
         EntityManager em = JPA.getEM();
-        String queryString = "select x from " + Notification.class.getSimpleName() + " x where x.";
+        String queryString = "select x from " + Notification.class.getSimpleName() + " x where (";
         int i = 0;
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            String key = entry.getKey();
+        for (MultiEntry entry : params.entrySet()) {
+            String conditionalOperator = "AND";
+            String key = (String) entry.getKey();
             Object value = entry.getValue();
-            String operator = value instanceof String ? "like" : "=";
-            String fsingleQuotes = value instanceof String ? "'%" : "";
-            String lsingleQuotes = value instanceof String ? "%'" : "";
-            queryString += key + " " + operator + " " + fsingleQuotes + value + lsingleQuotes;
-            i++;
-            boolean isLast = params.entrySet().size() == i;
-            if (!isLast) {
-                queryString += " AND x.";
-            }
+            if (!key.equals("$conditionalOperator")) {
+                {
+                    String operator = value instanceof String ? "like" : "=";
+                    String fsingleQuotes = value instanceof String ? "'%" : "";
+                    String lsingleQuotes = value instanceof String ? "%'" : "";
+                    queryString += "x." + key + " " + operator + " " + fsingleQuotes + value + lsingleQuotes;
+                    
+                }
 
+            }
+            
+            i++;
+            
+            boolean isLast = params.entrySet().size() == i;
+            if (!isLast && !key.equals("$conditionalOperator")) {
+                MultiEntry nextEntry = (MultiEntry) params.entrySet().toArray()[i];
+                String nextKey = (String) nextEntry.getKey();
+                Object nextValue = nextEntry.getValue();
+                if (nextKey.equals("$conditionalOperator")) {
+                    conditionalOperator = String.valueOf(nextValue);
+                }
+                queryString += " " + conditionalOperator + " ";
+            }
         }
+        queryString += ")";
+        String[] queryParts = queryString.split("AND");
+        queryString = String.join(") AND (", queryParts);
+        
         List<Notification> result = null;
         try {
             TypedQuery<Notification> query = em.createQuery(queryString, Notification.class);

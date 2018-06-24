@@ -151,6 +151,7 @@
                     <div class="col-8"></div>
                     <div class="col-2">
                         <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized() and jobMB.isJobMine(jobMB.job)}"/>
+                        <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
                     </div>
                 </div>
 

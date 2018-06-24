@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import model.JobStatusType;
 
 /**
  *
@@ -31,14 +32,32 @@ public class Job implements Serializable{
     private String title;
     private String description;
     private float amountPerHour;
+    private JobStatusType jobStatusType;
+
+    public JobStatusType getJobStatusType() {
+        return jobStatusType;
+    }
+
+    public void setJobStatusType(JobStatusType jobStatusType) {
+        this.jobStatusType = jobStatusType;
+    }
     @OneToMany(mappedBy = "job")
     private List<Notification> notifications;
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
     @ManyToOne
     private User hirer;
     @ManyToOne
     private User acceptedHiree;
     @ManyToMany
     private List<User> hirees;
+    
 
     public Job() {
         hirees = new ArrayList<>();

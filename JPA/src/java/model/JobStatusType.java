@@ -9,17 +9,16 @@ package model;
  *
  * @author fabri
  */
-public enum NotificationType {
-    REQUEST_ACCEPTED(0),
-    REQUEST_ADDED(1),
-    JOB_STARTED(2),
-    JOB_CANCELED_BY_HIREE(3),
-    JOB_CANCELED_BY_HIRER(4),
-    JOB_DONE(5);
+public enum JobStatusType {
+    NOT_STARTED(0),
+    STARTED(1),
+    CANCELED_BY_HIREE(2),
+    CANCELED_BY_HIRER(3),
+    DONE(4);
 
     private final int value;
 
-    private NotificationType(int value) {
+    private JobStatusType(int value) {
         this.value = value;
     }
 
@@ -27,3 +26,4 @@ public enum NotificationType {
         return value;
     }
 }
+

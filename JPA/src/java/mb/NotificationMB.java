@@ -5,6 +5,7 @@
  */
 package mb;
 
+import app.JPA;
 import entity.Job;
 import helper.NotificationHelper;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import entity.User;
 import java.util.HashMap;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import model.MultiMap;
 import repository.NotificationRepository;
 
 /**
@@ -51,15 +53,26 @@ public class NotificationMB extends BaseMB {
         if (userMB != null) {
             User currentUser = userMB.getUser();
             int userId = currentUser.getId();
-            HashMap<String, Object> paramsHirer = new HashMap<String, Object>();
-            paramsHirer.put("hirer.id", userId);
+         
+            MultiMap<String, Object> paramsHirer = new MultiMap<>();
             paramsHirer.put("notificationType", NotificationType.REQUEST_ADDED.getValue());
+            paramsHirer.put("$conditionalOperator", "OR");
+            paramsHirer.put("notificationType", NotificationType.JOB_STARTED.getValue());
+            paramsHirer.put("$conditionalOperator", "OR");
+            paramsHirer.put("notificationType", NotificationType.JOB_CANCELED_BY_HIREE.getValue());
+            paramsHirer.put("$conditionalOperator", "OR");
+            paramsHirer.put("notificationType", NotificationType.JOB_DONE.getValue());
+            paramsHirer.put("$conditionalOperator", "AND");
+            paramsHirer.put("hirer.id", userId);
 
             notifications = NotificationRepository.get(paramsHirer);
 
-            HashMap<String, Object> paramsHiree = new HashMap<String, Object>();
-            paramsHiree.put("hiree.id", userId);
+            MultiMap<String, Object> paramsHiree = new MultiMap<>();
             paramsHiree.put("notificationType", NotificationType.REQUEST_ACCEPTED.getValue());
+            paramsHiree.put("$conditionalOperator", "OR");
+            paramsHiree.put("notificationType", NotificationType.JOB_CANCELED_BY_HIRER.getValue());
+            paramsHirer.put("$conditionalOperator", "AND");
+            paramsHiree.put("hiree.id", userId);
             notifications.addAll(NotificationRepository.get(paramsHiree));
         }
 

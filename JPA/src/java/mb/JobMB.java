@@ -17,6 +17,7 @@ import helper.MessageHelper;
 import helper.NavigationHelper;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import model.JobStatusType;
 import repository.JobRepository;
 
 /**
@@ -109,6 +110,10 @@ public class JobMB extends BaseMB {
     public void acceptHiree(User hiree) {
         verifyAuthorization();
         User hirer = UserMB.getINSTANCE().getUser();
+        job.setAcceptedHiree(hiree);
+        job.setJobStatusType(JobStatusType.NOT_STARTED);
+        JobRepository.update(job);
+        jobs = JobRepository.getAll();
         NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ACCEPTED,
                 hirer, hiree, job);
     }
@@ -152,5 +157,43 @@ public class JobMB extends BaseMB {
 
     public int hireesCount(Job j) {
         return j.getHirees().size();
+    }
+
+    public boolean isJobGrantedToMe(Job j) {
+        User acceptedHiree = j.getAcceptedHiree();
+        User currentUser = UserMB.getINSTANCE().getUser();
+        boolean isJobGrantedToMe = false;
+        if (acceptedHiree != null) {
+            isJobGrantedToMe = acceptedHiree.getId() == currentUser.getId();
+        }
+        return isJobGrantedToMe;
+    }
+
+    public void setJobAsDone(Job j) {
+        j.setJobStatusType(JobStatusType.DONE);
+        JobRepository.update(j);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.JOB_DONE,
+                j.getHirer(), j.getAcceptedHiree(), job);
+    }
+
+    public void setJobAsCanceledByHiree(Job j) {
+        j.setJobStatusType(JobStatusType.CANCELED_BY_HIREE);
+        JobRepository.update(j);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.JOB_CANCELED_BY_HIREE,
+                j.getHirer(), j.getAcceptedHiree(), job);
+    }
+
+    public void setJobAsCanceledByHirer(Job j) {
+        j.setJobStatusType(JobStatusType.CANCELED_BY_HIRER);
+        JobRepository.update(j);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.JOB_CANCELED_BY_HIRER,
+                j.getHirer(), j.getAcceptedHiree(), job);
+    }
+
+    public void setJobAsStarted(Job j) {
+        j.setJobStatusType(JobStatusType.STARTED);
+        JobRepository.update(j);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.JOB_STARTED,
+                j.getHirer(), j.getAcceptedHiree(), job);
     }
 }
