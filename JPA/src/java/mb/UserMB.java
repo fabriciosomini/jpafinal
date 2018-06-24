@@ -25,6 +25,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
+import model.MultiMap;
 import repository.AuthenticationRepository;
 import repository.UserRepository;
 
@@ -91,7 +92,7 @@ public class UserMB {
 
         if (email != null && password != null) {
             if (!email.isEmpty() && !password.isEmpty()) {
-                HashMap<String, Object> params = new HashMap<>();
+                MultiMap<String, Object> params = new MultiMap<>();
                 params.put("email", email);
                 params.put("password", password);
 
