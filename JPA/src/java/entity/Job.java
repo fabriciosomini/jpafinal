@@ -5,36 +5,45 @@
  */
 package entity;
 
+import helper.IdHelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author fabri
  */
 @Entity
-public class Job extends BaseModel{
+@Table(name = "JOB")
+public class Job implements Serializable{
 
-    @OneToMany(mappedBy = "job")
-    private List<Notification> notifications;
-
+    @Id
+    @GeneratedValue
+    private int id;
     private String title;
     private String description;
     private float amountPerHour;
+    @OneToMany(mappedBy = "job")
+    private List<Notification> notifications;
     @ManyToOne
     private User hirer;
     @ManyToOne
     private User acceptedHiree;
+    @ManyToMany
     private List<User> hirees;
-    
-    public Job(){
+
+    public Job() {
         hirees = new ArrayList<>();
     }
+
     public User getAcceptedHiree() {
         return acceptedHiree;
     }
@@ -43,8 +52,6 @@ public class Job extends BaseModel{
         this.acceptedHiree = acceptedHiree;
     }
 
-
-    
     public String getDescription() {
         return description;
     }
@@ -83,6 +90,25 @@ public class Job extends BaseModel{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean equals(Job baseModel) {
+        return this.id == baseModel.getId();
+    }
+
+  
+    public int getId() {
+        return id;
+    }
+
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    @Override
+    public final int hashCode() {
+        return IdHelper.generateId();
     }
 
 }

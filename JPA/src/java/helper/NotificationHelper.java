@@ -26,10 +26,7 @@ public class NotificationHelper {
             case REQUEST_ADDED:
                 description = "Há um novo candidato para o trabalho";
                 break;
-            case REQUEST_DENIED:
-                  description = "Infelizmente o contratante optou por outro profissional";
-                break;
-
+  
         }
         notification.setDescription(description);
         notification.setNotificationType(noticationType);

@@ -10,7 +10,16 @@ package model;
  * @author fabri
  */
 public enum NotificationType {
-    REQUEST_ACCEPTED,
-    REQUEST_DENIED,
-    REQUEST_ADDED
+    REQUEST_ACCEPTED(0),
+    REQUEST_ADDED(1);
+
+    private final int value;
+
+    private NotificationType(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }

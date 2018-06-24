@@ -5,13 +5,26 @@
  */
 package entity;
 
+import helper.IdHelper;
+import java.io.Serializable;
 import java.time.LocalDate;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author fabri
  */
-public class Authentication extends BaseModel{
+@Entity
+@Table(name = "AUTHENTICATION")
+public class Authentication implements Serializable {
+
+    @Id
+    @GeneratedValue
+    private int id;
+
     private String sessionId;
     private LocalDate limitDate;
 
@@ -29,5 +42,24 @@ public class Authentication extends BaseModel{
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public boolean equals(Authentication baseModel) {
+        return this.id == baseModel.getId();
+    }
+
+ 
+    public int getId() {
+        return id;
+    }
+
+   
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    @Override
+    public final int hashCode() {
+        return IdHelper.generateId();
     }
 }

@@ -29,7 +29,7 @@ public class JobMB extends BaseMB {
 
     private List<Job> jobs;
     private Job job;
-    private JobRepository jobRepository;
+
 
     public Job getJob() {
         verifyAuthorization();
@@ -54,10 +54,9 @@ public class JobMB extends BaseMB {
     @PostConstruct
     public void init() {
        
-        jobs = new ArrayList<>();
+        jobs = JobRepository.getAll();
         job = new Job();
-        jobRepository = new JobRepository();
-
+     
     }
 
     public void addJobRequest(Job job) {
@@ -113,8 +112,8 @@ public class JobMB extends BaseMB {
         } else {
             User hirer = UserMB.getINSTANCE().getUser();
             job.setHirer(hirer);
-            jobRepository.insert(job);
-            jobs = jobRepository.getAll();
+            JobRepository.insert(job);
+            jobs = JobRepository.getAll();
             job = new Job();
             NavigationHelper.navigate("index.xhtml?faces-redirect=true");
         }

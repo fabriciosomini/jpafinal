@@ -38,16 +38,12 @@ public class UserMB {
     private User user;
     private Authentication authentication;
 
-    private AuthenticationRepository authenticationRepository;
-    private UserRepository userRepository;
-
     @PostConstruct
     public void init() {
         INSTANCE = this;
         user = new User();
         authentication = new Authentication();
-        authenticationRepository = new AuthenticationRepository();
-        userRepository = new UserRepository();
+
     }
 
     public static UserMB getINSTANCE() {
@@ -75,7 +71,7 @@ public class UserMB {
     public boolean isAuthorized() {
         String sessionId = getCurrentSessionId();
         if (!sessionId.isEmpty()) {
-            List<Authentication> authentications = authenticationRepository
+            List<Authentication> authentications = AuthenticationRepository
                     .get("sessionId", sessionId);
             if (authentications.size() > 0) {
                 Authentication a = authentications.get(0);
@@ -102,7 +98,7 @@ public class UserMB {
                 params.put("email", email);
                 params.put("password", password);
 
-                List<User> users = userRepository.get(params);
+                List<User> users = UserRepository.get(params);
                 if (users != null) {
                     if (users.size() > 0) {
                         user = users.get(0);
@@ -110,7 +106,7 @@ public class UserMB {
                         //authentication.setLimitDate(sessionLimitDate);
                         String sessionId = getCurrentSessionId();
                         authentication.setSessionId(sessionId);
-                        authenticationRepository.insert(authentication);
+                        AuthenticationRepository.insert(authentication);
                         NavigationHelper.navigate("index.xhtml?faces-redirect=true");
                     }
                 }
@@ -123,27 +119,26 @@ public class UserMB {
 
     public void signUp() {
 
-        List<User> usersResult = userRepository.get("email", user.getEmail());
+        List<User> usersResult = UserRepository.get("email", user.getEmail());
 
         if (usersResult.size() > 0) {
             MessageHelper.addMessage("Usuário já existe, favor informar outro email");
         } else {
-            int result = userRepository.insert(user);
-            String outcome = "";
-            if (result == 0) {
-                login();
-            } else {
-                MessageHelper.addMessage("Houve um erro ao criar seu usuário. "
-                        + "Tente novamente");
-            }
+            UserRepository.insert(user);
+            login();
+
         }
     }
 
     public void disconnect() {
-
-        authenticationRepository.delete(authentication);
-        user = new User();
-        authentication = new Authentication();
+        String sessionId = getCurrentSessionId();
+        List<Authentication> authentications = AuthenticationRepository.get("sessionId", sessionId);
+        if (authentications.size() > 0) {
+            authentication = authentications.get(0);
+            AuthenticationRepository.delete(authentication);
+            user = new User();
+            authentication = new Authentication();
+        }
 
     }
 

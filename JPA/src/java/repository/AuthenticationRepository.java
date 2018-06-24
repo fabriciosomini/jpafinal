@@ -5,15 +5,108 @@
  */
 package repository;
 
+import app.JPA;
 import entity.Authentication;
+import helper.IdHelper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 /**
  *
  * @author fabri
  */
-public class AuthenticationRepository extends BaseRepository<Authentication> {
+public class AuthenticationRepository {
 
-    public AuthenticationRepository() {
-        init(Authentication.class);
+    private AuthenticationRepository() {
+
+    }
+
+    public static void insert(Authentication object) {
+
+        EntityManager em = JPA.getEM();
+        EntityTransaction t = em.getTransaction();
+        try {
+            t.begin();
+            em.merge(object);
+            t.commit();
+        } catch (Exception e) {
+            t.rollback();
+            throw new RuntimeException(e.getMessage());
+        }
+        object = null;
+    }
+
+    public static void delete(Authentication object) {
+        EntityManager em = JPA.getEM();
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        em.remove(em.find(Authentication.class, object.getId()));
+        t.commit();
+    }
+
+    public static List<Authentication> get(String key, Object value) {
+        String operator = value instanceof String ? "like" : "=";
+        String singleQuotes = value instanceof String ? "%" : "";
+        EntityManager em = JPA.getEM();
+        String fsingleQuotes = value instanceof String ? "'%" : "";
+        String lsingleQuotes = value instanceof String ? "%'" : "";
+        String queryString = "select x from " + Authentication.class.getSimpleName() + " x where x."
+                + key + " " + operator + " " + fsingleQuotes + value + lsingleQuotes;
+
+        List<Authentication> result = null;
+        try {
+            TypedQuery<Authentication> query = em.createQuery(queryString, Authentication.class);
+            result = query.getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            result = result == null ? new ArrayList() : result;
+        }
+
+        return result;
+    }
+
+    public static List<Authentication> get(Map<String, Object> params) {
+
+        EntityManager em = JPA.getEM();
+        String queryString = "select x from " + Authentication.class.getSimpleName() + " x where x.";
+        int i = 0;
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            String operator = value instanceof String ? "like" : "=";
+            String fsingleQuotes = value instanceof String ? "'%" : "";
+            String lsingleQuotes = value instanceof String ? "%'" : "";
+            queryString += key + " " + operator + " " + fsingleQuotes + value + lsingleQuotes;
+            i++;
+            boolean isLast = params.entrySet().size() == i;
+            if (!isLast) {
+                queryString += " AND x.";
+            }
+
+        }
+        List<Authentication> result = null;
+        try {
+            TypedQuery<Authentication> query = em.createQuery(queryString, Authentication.class);
+            result = query.getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            result = result == null ? new ArrayList() : result;
+        }
+
+        return result;
+
+    }
+
+    public static List<Authentication> getAll() {
+        EntityManager em = JPA.getEM();
+        String queryString = "select x from " + Authentication.class.getSimpleName() + " x";
+        TypedQuery<Authentication> result = em.createQuery(queryString, Authentication.class);
+        return result.getResultList();
     }
 }

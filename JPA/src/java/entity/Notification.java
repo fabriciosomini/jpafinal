@@ -5,10 +5,15 @@
  */
 package entity;
 
+import helper.IdHelper;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import model.NotificationType;
 
 /**
@@ -16,21 +21,20 @@ import model.NotificationType;
  * @author fabri
  */
 @Entity
-public class Notification extends BaseModel {
-    
+@Table(name = "NOTIFICATION")
+public class Notification implements Serializable {
+
+    @Id
+    @GeneratedValue
+    private int id;
+    private String description;
+    private int notificationType;
     @ManyToOne
     private Job job;
     @ManyToOne
     private User hirer;
-    
-    //TODO
-    private int hirerId;
-    private int hireeId;
-    
     @ManyToOne
     private User hiree;
-    private String description;
-    private NotificationType notificationType;
 
     public Job getJob() {
         return job;
@@ -40,32 +44,19 @@ public class Notification extends BaseModel {
         this.job = job;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public User getHirer() {
         return hirer;
-    }
-
-    public void setHirer(User hirer) {
-        
-        //TODO: Remover
-        hirerId = hirer.getId();
-        this.hirer = hirer;
     }
 
     public User getHiree() {
         return hiree;
     }
 
+    public void setHirer(User hirer) {
+        this.hirer = hirer;
+    }
+
     public void setHiree(User hiree) {
-      
-        hireeId = hiree.getId();
         this.hiree = hiree;
     }
 
@@ -77,11 +68,29 @@ public class Notification extends BaseModel {
         this.description = description;
     }
 
-    public NotificationType getNotificationType() {
+    public int getNotificationType() {
         return notificationType;
     }
 
     public void setNotificationType(NotificationType notificationType) {
-        this.notificationType = notificationType;
+        this.notificationType = notificationType.getValue();
     }
+
+    public boolean equals(Notification baseModel) {
+        return this.id == baseModel.getId();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public final int hashCode() {
+        return IdHelper.generateId();
+    }
+
 }

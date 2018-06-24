@@ -5,30 +5,56 @@
  */
 package entity;
 
+import helper.IdHelper;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author fabri
  */
 @Entity
-public class User extends BaseModel{
+@Table(name = "USER")
+public class User implements Serializable {
 
-    @OneToMany(mappedBy = "hirer")
-    private List<Notification> notifications;
+    @ManyToOne
+    private Job job;
 
-    @OneToMany(mappedBy = "hirer")
-    private List<Job> jobs;
-
+    @Id
+    @GeneratedValue
+    private int id;
     private String firstName;
     private String lastName;
     private String nationalIdentity;
     private String email;
     private String password;
+    @OneToMany
+    private List<Notification> notifications;
+    @ManyToMany
+    private List<Job> jobs;
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -68,6 +94,23 @@ public class User extends BaseModel{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean equals(User baseModel) {
+        return this.id == baseModel.getId();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public final int hashCode() {
+        return IdHelper.generateId();
     }
 
 }

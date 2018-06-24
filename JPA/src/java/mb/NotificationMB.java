@@ -31,14 +31,12 @@ public class NotificationMB extends BaseMB {
 
     private static NotificationMB INSTANCE;
     private List<Notification> notifications;
-    private NotificationRepository notificationRepository;
 
     @PostConstruct
     public void init() {
 
         INSTANCE = this;
         notifications = new ArrayList<>();
-        notificationRepository = new NotificationRepository();
 
     }
 
@@ -51,11 +49,17 @@ public class NotificationMB extends BaseMB {
         UserMB userMB = UserMB.getINSTANCE();
         if (userMB != null) {
             User currentUser = userMB.getUser();
-            String userId = String.valueOf(currentUser.getId());
-            //TODO: Cuidado quando implementar o banco
+            int userId = currentUser.getId();
+            HashMap<String, Object> paramsHirer = new HashMap<String, Object>();
+            paramsHirer.put("hirer.id", userId);
+            paramsHirer.put("notificationType", NotificationType.REQUEST_ADDED.getValue());
 
-            notifications = notificationRepository.get("hirerId", userId);
-            notifications.addAll(notificationRepository.get("hireeId", userId));
+            notifications = NotificationRepository.get(paramsHirer);
+
+            HashMap<String, Object> paramsHiree = new HashMap<String, Object>();
+            paramsHiree.put("hiree.id", userId);
+            paramsHiree.put("notificationType", NotificationType.REQUEST_ACCEPTED.getValue());
+            notifications.addAll(NotificationRepository.get(paramsHiree));
         }
 
         return notifications;
@@ -69,7 +73,7 @@ public class NotificationMB extends BaseMB {
     public void generateNotification(NotificationType notificationType, User hirer, User hiree) {
         verifyAuthorization();
         Notification notification = NotificationHelper.generate(notificationType, hirer, hiree);
-        notificationRepository.insert(notification);
+        NotificationRepository.insert(notification);
 
     }
 
