@@ -32,21 +32,21 @@
             <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
                 <div class="row">
                     <div class="col-4">
-                        <p:inputText class="form-control" value="#{userMB.user.email}" pt:placeholder="E-mail" />
+                        <p:inputText class="form-control" value="#{userMB.user.email}" pt:placeholder="E-mail"/>
                     </div>
                     <div class="col-2">
                         <p:password class="form-control" value="#{userMB.user.password}" pt:placeholder="Senha" />
                     </div>
 
                     <div class="col-1">
-                        <p:commandButton class="btn-success" value="Entrar" actionListener="#{userMB.login()}" />
+                        <p:commandButton class="btn btn-success" value="Entrar" actionListener="#{userMB.login()}" />
                     </div>
 
                     <div class="col-1"></div>
 
                     <div class="col-4" style="text-align: right;">
                         <p style="display: inline;">Não possui uma conta? </p>
-                        <p:commandButton class="btn-primary" value="Cadastre-se" action="signup.xhtml?faces-redirect=true" />
+                        <p:commandButton class="btn btn-primary" value="Cadastre-se" action="signup.xhtml?faces-redirect=true" />
                     </div>
                 </div>
             </h:panelGroup>
@@ -81,17 +81,17 @@
                 <h:panelGroup id="pg-job-edit" rendered="#{jobMB.isJobMine()}">
                     <div class="row row-spaced">
                         <div class="col">
-                            <p:inputText class="form-control" value="#{jobMB.job.title}" pt:placeholder="Título do trabalho" />
+                            <p:inputText class="form-control" value="#{jobMB.job.title}" pt:placeholder="Título do trabalho" readonly="#{!jobMB.isJobMine()}"/>
                         </div>
                     </div>
                     <div class="row row-spaced">
                         <div class="col">
-                            <p:inputTextarea class="form-control" value="#{jobMB.job.description}" pt:placeholder="Descrição do trabalho" />
+                            <p:inputTextarea class="form-control" value="#{jobMB.job.description}" pt:placeholder="Descrição do trabalho" readonly="#{!jobMB.isJobMine()}"/>
                         </div>
                     </div>
                     <div class="row row-spaced">
                         <div class="col-3">
-                            <p:inputText class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" />
+                            <p:inputText class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" readonly="#{!jobMB.isJobMine()}" />
                         </div>
                         <div class="col-6"></div>
                         <div class="col-3" align="right">
@@ -140,23 +140,20 @@
                     </div>
                 </h:panelGroup>
 
-                <h:panelGroup id="pg-job-read" rendered="#{!jobMB.isJobMine()}">
-                    <div class="row row-spaced">
-                        <div class="col">
-
-                        </div>
-                    </div>
+                <h:panelGroup id="messages">
+                    <p:messages globalOnly="true" styleClass="validation-message" showIcon="true" autoUpdate="true"></p:messages>
                 </h:panelGroup>
 
                 <div class="row row-spaced">
-                    <div class="col-1">
-                        <p:link outcome="index" class="btn btn-block btn-primary" value="Voltar" />
-                    </div>
-                    <div class="col-9"></div>
                     <div class="col-2">
-                        <p:commandButton class="btn btn-success" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" style="width: 100%;" action="index.xhtml?faces-redirect=true"/>
+                        <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{jobMB.back()}" immediate="true" />
+                    </div>
+                    <div class="col-8"></div>
+                    <div class="col-2">
+                        <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized()}"/>
                     </div>
                 </div>
+
             </h:form>
             <div class="row">
                 <div class="col">

@@ -7,6 +7,7 @@ package helper;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.print.attribute.standard.Severity;
 
 /**
  *
@@ -14,8 +15,10 @@ import javax.faces.context.FacesContext;
  */
 public class MessageHelper {
 
-    public static void addMessage(String message){
+    public static void addMessage(String message) {
         FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(message));
+        FacesMessage facesMessage = new FacesMessage(message);
+        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage(null, facesMessage);
     }
 }

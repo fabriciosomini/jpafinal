@@ -27,7 +27,7 @@ import repository.NotificationRepository;
 @Named(value = "notificationMB")
 @ManagedBean
 @SessionScoped
-public class NotificationMB {
+public class NotificationMB extends BaseMB {
 
     private static NotificationMB INSTANCE;
     private List<Notification> notifications;
@@ -35,8 +35,9 @@ public class NotificationMB {
 
     @PostConstruct
     public void init() {
-        INSTANCE = this;
 
+        INSTANCE = this;
+        notifications = new ArrayList<>();
         notificationRepository = new NotificationRepository();
 
     }
@@ -46,30 +47,27 @@ public class NotificationMB {
     }
 
     public List<Notification> getNotifications() {
-        if (notifications == null || notifications.isEmpty()) {
-            UserMB userMB = UserMB.getINSTANCE();
-            if (userMB != null) {
-                User currentUser = userMB.getUser();
-                String userId = String.valueOf(currentUser.getId());
-                //TODO: Cuidado quando implementar o banco
-       
-                notifications = notificationRepository.get("hirerId", userId); 
-                notifications.addAll(notificationRepository.get("hireeId", userId));
-                Notification notification = new Notification();
-                notification.setDescription("Novo candidato para o trabalho");
-                notification.setJob(new Job());
-                notifications.add(notification);
-            }
+        verifyAuthorization();
+        UserMB userMB = UserMB.getINSTANCE();
+        if (userMB != null) {
+            User currentUser = userMB.getUser();
+            String userId = String.valueOf(currentUser.getId());
+            //TODO: Cuidado quando implementar o banco
+
+            notifications = notificationRepository.get("hirerId", userId);
+            notifications.addAll(notificationRepository.get("hireeId", userId));
         }
+
         return notifications;
     }
 
     public void setNotifications(List<Notification> notifications) {
+        verifyAuthorization();
         this.notifications = notifications;
     }
 
     public void generateNotification(NotificationType notificationType, User hirer, User hiree) {
-
+        verifyAuthorization();
         Notification notification = NotificationHelper.generate(notificationType, hirer, hiree);
         notificationRepository.insert(notification);
 
@@ -79,4 +77,13 @@ public class NotificationMB {
         return "";
     }
 
+    public int notificationCount() {
+        verifyAuthorization();
+        return notifications.size();
+    }
+
+    public boolean isEmpty() {
+        verifyAuthorization();
+        return notifications.size() == 0;
+    }
 }

@@ -13,7 +13,7 @@
 
         <title>Freelancer</title>
 
-        
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
         <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/styles/style.css" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet" />
@@ -30,6 +30,7 @@
         <div class="popover-body" style="display: none;">
             <h:form>
                 <ul>
+                    <h:panelGroup rendered="#{notificationMB.isEmpty()}">Não há notificações</h:panelGroup>
                     <c:forEach var="notification" items="#{notificationMB.notifications}">
                         <li><p:commandLink action="jobdetails.xhtml?faces-redirect=true"
                                            actionListener="#{jobMB.edit(notification.job)}"
@@ -50,36 +51,60 @@
         </div>
         <div class="container">
             <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
-                <div class="row">
-                    <div class="col-4">
-                        <p:inputText class="form-control" value="#{userMB.user.email}" pt:placeholder="E-mail" />
-                    </div>
-                    <div class="col-2">
-                        <p:password class="form-control" value="#{userMB.user.password}" pt:placeholder="Senha" />
-                    </div>
+                <h:form>
+                    <div class="row">
+                        <div class="col-4">
+                            <p:inputText class="form-control" label="E-mail" id="email" value="#{userMB.user.email}" pt:placeholder="E-mail" required="true"/>
+                            <p:messages for="email" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
+                        </div>
+                        <div class="col-2">
+                            <p:password class="form-control" label="Senha" id="password" value="#{userMB.user.password}" pt:placeholder="Senha" required="true" />
+                            <p:messages for="password" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
+                        </div>
+                        <div class="col-1">
+                            <h:form>
+                                <p:commandButton class="btn btn-success" value="Entrar" actionListener="#{userMB.login()}" />
+                            </h:form>
+                        </div>
 
-                    <div class="col-1">
-                        <h:form>
-                            <p:commandButton class="btn btn-success" value="Entrar" actionListener="#{userMB.login()}" />
-                        </h:form>
-                    </div>
+                        <div class="col-1">
 
-                    <div class="col-1"></div>
+                        </div>
 
-                    <div class="col-4" style="text-align: right;">
-                        <h:form>
+                        <div class="col-4" style="text-align: right;">  
                             <p class="label-inline label-side-margin">Não possui uma conta?</p>                         
-                            <p:commandButton class="btn btn-primary" value="Cadastre-se" action="signup.xhtml?faces-redirect=true" /> 
-                        </h:form>
+                            <p:commandButton class="btn btn-primary" value="Cadastre-se" action="#{userMB.newUser()}" immediate="true"/>    
+                        </div>
                     </div>
-                </div>
+                    <h:panelGroup id="messages">
+                        <p:messages globalOnly="true" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
+                    </h:panelGroup>
+                </h:form>
             </h:panelGroup>
 
             <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
                 <h:form>
                     <div class="row">
                         <div class="col-3">
-                            <p:outputLabel value="Olá, ${userMB.user.firstName}!" />
+
+                            <div class="panel-group" style="position: absolute">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" href="#collapse1"><p:outputLabel value="Olá, ${userMB.user.firstName}!" /></a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <p:commandLink 
+                                                               actionListener="#{userMB.disconnect()}"
+                                                               value="Sair" ajax="false"/>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-6"></div>
                         <div class="col-3" align="center">
@@ -102,7 +127,7 @@
 
                     <a data-toggle="popover" id="notifications-btn" title="Notificações" data-placement="bottom" data-content="" style="float: right;"> 
                         <h:form>
-                            <p:outputLabel class="btn btn-notification" value="#{notificationMB.notifications.size()}" rendered="#{userMB.isAuthorized()}"  />         
+                            <p:outputLabel class="btn btn-notification" value="#{notificationMB.notificationCount()}" rendered="#{userMB.isAuthorized()}"  />         
                         </h:form>
                     </a>                              
                 </div>

@@ -13,6 +13,8 @@ import javax.inject.Named;
 import entity.Job;
 import model.NotificationType;
 import entity.User;
+import helper.MessageHelper;
+import helper.NavigationHelper;
 import javax.faces.bean.ManagedBean;
 import repository.JobRepository;
 
@@ -23,100 +25,104 @@ import repository.JobRepository;
 @Named(value = "jobMB")
 @ManagedBean
 @SessionScoped
-public class JobMB {
+public class JobMB extends BaseMB {
 
     private List<Job> jobs;
     private Job job;
     private JobRepository jobRepository;
 
     public Job getJob() {
+        verifyAuthorization();
         return job;
     }
 
     public void setJob(Job job) {
+        verifyAuthorization();
         this.job = job;
     }
 
     public List<Job> getJobs() {
+        verifyAuthorization();
         return jobs;
     }
 
     public void setJobs(List<Job> jobs) {
+        verifyAuthorization();
         this.jobs = jobs;
     }
 
     @PostConstruct
     public void init() {
+       
         jobs = new ArrayList<>();
+        job = new Job();
         jobRepository = new JobRepository();
-        //generateMemoryData();
 
     }
 
-    public String addJobRequest(Job job) {
-        User currentUser = UserMB.getINSTANCE().getUser();
-        
-        jobs.stream().forEach(p -> {
-            if (p.getId() == job.getId()) {
-                p.addHirees(currentUser);
-            }
-        });
-        User hirer = job.getHirer();
-        NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
-        
-        return "index.xhtml?faces-redirect=true";
+    public void addJobRequest(Job job) {
+        verifyAuthorization();
+        if (!UserMB.getINSTANCE().isAuthorized()) {
+            MessageHelper.addMessage("Você precisa entrar para poder inserir um trabalho");
+        } else {
+            User currentUser = UserMB.getINSTANCE().getUser();
+
+            jobs.stream().forEach(p -> {
+                if (p.getId() == job.getId()) {
+                    p.addHirees(currentUser);
+                }
+            });
+            User hirer = job.getHirer();
+            NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ADDED, hirer, currentUser);
+            NavigationHelper.navigate("index.xhtml?faces-redirect=true");
+
+        }
+
     }
 
     public boolean isJobMine() {
-        //TODO: pegar do banco
-        return true;
+        verifyAuthorization();
+        User currentUser = UserMB.getINSTANCE().getUser();
+        User hirer = job.getHirer();
+        boolean isMine = hirer == null ? false : job.getHirer().equals(currentUser);
+        return isMine;
     }
 
-    /*private void generateMemoryData() {
-
-        String email = "fabricio.somini@gmail.com";
-        String firstName = "Fabricio";
-        String lastName = "Somini";
-        String cpf = "877.593.036-61";
-        String password = "#$%_FA15";
-
-        User hirer = new User();
-        hirer.setId(0);
-        hirer.setEmail(email);
-        hirer.setFirstName(firstName);
-        hirer.setLastName(lastName);
-        hirer.setNationalIdentity(cpf);
-        hirer.setPassword(password);
-
-        String description = "Create a CRUD app.";
-        float amountPerHour = 25.50f;
-
-        Job job = new Job();
-        job.setId(0);
-        job.setDescription(description);
-        job.setAmountPerHour(amountPerHour);
-        job.setHirer(hirer);
-        jobs.add(job);
-    }*/
     public void acceptHiree(User hiree) {
-
+        verifyAuthorization();
+        User hirer = UserMB.getINSTANCE().getUser();
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.REQUEST_ACCEPTED, hirer, hiree);
     }
 
     public void edit(Job job) {
+        verifyAuthorization();
         this.job = job;
     }
 
     public void newJob() {
+        verifyAuthorization();
+        User hirer = UserMB.getINSTANCE().getUser();
         job = new Job();
+        job.setHirer(hirer);
     }
 
     public void saveJob() {
+        verifyAuthorization();
+        if (!UserMB.getINSTANCE().isAuthorized()) {
+            MessageHelper.addMessage("Você precisa entrar para poder inserir um trabalho");
+        } else {
+            User hirer = UserMB.getINSTANCE().getUser();
+            job.setHirer(hirer);
+            jobRepository.insert(job);
+            jobs = jobRepository.getAll();
+            NavigationHelper.navigate("index.xhtml?faces-redirect=true");
+        }
 
-        User hirer = UserMB.getINSTANCE().getUser();
-        job.setHirer(hirer);
-        jobRepository.insert(job);
-        jobs = jobRepository.getAll();
-       
+    }
+    
+    public void back(){
+        job = new Job();
+        NavigationHelper.navigate("index.xhtml?faces-redirect=true");
     }
 
 }

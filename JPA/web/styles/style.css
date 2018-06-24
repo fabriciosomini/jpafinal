@@ -81,7 +81,7 @@ ul{
 }
 
 .validation-message{
-    color: 'red';
+    color: red;
     font-size: 12px;
     width: 400px;
 }
@@ -96,13 +96,19 @@ div.ui-messages-error{
 
 }
 
+div.ui-messages-info{
+    height: 15px;
+    background: transparent;
+    border: none;
+    margin-top: -5px;
+    margin-left: -10px;
+    margin-bottom: 10px;
+    color: red;
+
+}
+
 span.ui-messages-error-summary{
     font-weight: 500;
-}
-body:not(popover) {
-    -moz-transform: scale(0.9, 0.9); /* Moz-browsers */
-    zoom: 0.90; /* Other non-webkit browsers */
-    zoom: 90%; /* Webkit browsers */
 }
 
 .label-side-margin{
@@ -124,4 +130,14 @@ button>span{
 
 td{
     border: 1px solid #dee2e6 !important;
+}
+
+button.btn-secondary{
+    
+    background: grey;
+}
+
+li.list-group-item{
+    
+    opacity: 100;
 }

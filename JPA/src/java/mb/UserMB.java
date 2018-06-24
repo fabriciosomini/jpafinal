@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import entity.Authentication;
+import entity.Job;
 import entity.User;
 import helper.CookieHelper;
 import helper.MessageHelper;
@@ -36,7 +37,7 @@ public class UserMB {
     private static UserMB INSTANCE;
     private User user;
     private Authentication authentication;
-    private String sessionId = "";
+
     private AuthenticationRepository authenticationRepository;
     private UserRepository userRepository;
 
@@ -45,13 +46,8 @@ public class UserMB {
         INSTANCE = this;
         user = new User();
         authentication = new Authentication();
-
         authenticationRepository = new AuthenticationRepository();
         userRepository = new UserRepository();
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public static UserMB getINSTANCE() {
@@ -62,28 +58,33 @@ public class UserMB {
         this.user = user;
     }
 
-    public boolean isAuthorized() {
-
+    private String getCurrentSessionId() {
         CookieHelper cookieHelper = new CookieHelper();
         Cookie cookie = cookieHelper.getCookie("JSESSIONID");
+        String JSESSIONID = "";
         if (cookie != null) {
-            String JSESSIONID = cookie.getValue();
-            if (JSESSIONID != null) {
-                if (!JSESSIONID.isEmpty()) {
-                    List<Authentication> authentications = authenticationRepository
-                            .get("sessionId", JSESSIONID);
-                    if (authentications.size() > 0) {
-                        Authentication a = authentications.get(0);
-                        /*if (LocalDate.now().compareTo(a.getLimitDate()) < 0) {
-                        return true;
-                    }*/
+            JSESSIONID = cookie.getValue();
 
-                        return true;
-                    }
-                }
-            }
         }
 
+        JSESSIONID = JSESSIONID == null ? "" : JSESSIONID;
+
+        return JSESSIONID;
+    }
+
+    public boolean isAuthorized() {
+        String sessionId = getCurrentSessionId();
+        if (!sessionId.isEmpty()) {
+            List<Authentication> authentications = authenticationRepository
+                    .get("sessionId", sessionId);
+            if (authentications.size() > 0) {
+                Authentication a = authentications.get(0);
+                /*if (LocalDate.now().compareTo(a.getLimitDate()) < 0) {
+                        return true;
+                    }*/
+                return true;
+            }
+        }
         return false;
     }
 
@@ -107,12 +108,11 @@ public class UserMB {
                         user = users.get(0);
                         //LocalDate sessionLimitDate = LocalDate.now().plus(Duration.of(1, ChronoUnit.MINUTES));
                         //authentication.setLimitDate(sessionLimitDate);
+                        String sessionId = getCurrentSessionId();
                         authentication.setSessionId(sessionId);
                         authenticationRepository.insert(authentication);
                         NavigationHelper.navigate("index.xhtml?faces-redirect=true");
                     }
-                } else {
-                    MessageHelper.addMessage("Usuário não encontrado");
                 }
             }
         }
@@ -137,5 +137,23 @@ public class UserMB {
                         + "Tente novamente");
             }
         }
+    }
+
+    public void disconnect() {
+
+        authenticationRepository.delete(authentication);
+        user = new User();
+        authentication = new Authentication();
+
+    }
+
+    public void newUser() {
+        user = new User();
+        NavigationHelper.navigate("signup.xhtml?faces-redirect=true");
+    }
+
+    public void back() {
+        user = new User();
+        NavigationHelper.navigate("index.xhtml?faces-redirect=true");
     }
 }
