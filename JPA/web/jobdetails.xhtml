@@ -120,6 +120,7 @@
                         <div class="col">
                             <p:dataTable id="table-hirees" value="#{jobMB.job.hirees}" var="hire" styleClass="table table-bordered table-striped"
                                          rows="10"
+                                         emptyMessage="Não há registros"
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="10,20,35">
@@ -132,7 +133,7 @@
                                     <h:outputText value="#{hire.email}" />
                                 </p:column>
                                 <p:column>
-                                    <p:commandButton class="btn-success" value="Contratar" actionListener="#{jobMB.acceptHire(hire)}" />
+                                    <p:commandButton class="btn btn-success" value="Contratar" actionListener="#{jobMB.acceptHire(hire)}" />
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -153,7 +154,7 @@
                     </div>
                     <div class="col-9"></div>
                     <div class="col-2">
-                        <p:commandButton class="btn-success" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" style="width: 100%;" action="index.xhtml?faces-redirect=true"/>
+                        <p:commandButton class="btn btn-success" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" style="width: 100%;" action="index.xhtml?faces-redirect=true"/>
                     </div>
                 </div>
             </h:form>
