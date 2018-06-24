@@ -115,6 +115,7 @@ public class JobMB extends BaseMB {
             job.setHirer(hirer);
             jobRepository.insert(job);
             jobs = jobRepository.getAll();
+            job = new Job();
             NavigationHelper.navigate("index.xhtml?faces-redirect=true");
         }
 

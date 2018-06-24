@@ -151,7 +151,7 @@
                                      rowsPerPageTemplate="10,20,35">
                             <p:column width="50%">
                                 <f:facet name="header">Trabalho</f:facet>
-                                <h:commandLink value="#{job.title}" action="jobdetails.xhtml?faces-redirect=true" />
+                                <h:commandLink value="#{job.title}" action="jobdetails.xhtml?faces-redirect=true" actionListener="#{jobMB.edit(job)}" />
                             </p:column>
                             <p:column>
                                 <f:facet name="header">Valor por hora</f:facet>
