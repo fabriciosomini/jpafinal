@@ -21,169 +21,182 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>       
     </h:head>
     <h:body>
-        <div class="jumbotron jumbotron-fluid img">
-            <div class="container" align="center">
-                <h1 class="display-4">FreeLancer</h1>
-                <p class="lead">Encontre o freelancer para o seu projeto!</p>
-                <p align="right"></p>
+        <h:form>
+            <div class="jumbotron jumbotron-fluid img">
+                <div class="container" align="center">
+                    <h1 class="display-4">FreeLancer</h1>
+                    <p class="lead">Encontre o freelancer para o seu projeto!</p>
+                    <p align="right"></p>
+                </div>
             </div>
-        </div>
-        <div class="container">
-            <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
-                <div class="row">
-                    <div class="col-4">
-                        <p:inputText class="form-control" value="#{userMB.user.email}" pt:placeholder="E-mail"/>
-                    </div>
-                    <div class="col-2">
-                        <p:password class="form-control" value="#{userMB.user.password}" pt:placeholder="Senha" />
-                    </div>
+            <div class="container">
+                <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
+                    <div class="row">
+                        <div class="col-4">
+                            <p:inputText class="form-control" value="#{userMB.user.email}" pt:placeholder="E-mail"/>
+                        </div>
+                        <div class="col-2">
+                            <p:password class="form-control" value="#{userMB.user.password}" pt:placeholder="Senha" />
+                        </div>
 
-                    <div class="col-1">
-                        <p:commandButton class="btn btn-success" value="Entrar" actionListener="#{userMB.login()}" />
+                        <div class="col-1">
+                            <p:commandButton class="btn btn-success" value="Entrar" actionListener="#{userMB.login()}" />
+                        </div>
+
+                        <div class="col-1"></div>
+
+                        <div class="col-4" style="text-align: right;">
+                            <p style="display: inline;">Não possui uma conta? </p>
+                            <p:commandButton class="btn btn-primary" value="Cadastre-se" action="signup.xhtml?faces-redirect=true" />
+                        </div>
                     </div>
+                </h:panelGroup>
 
-                    <div class="col-1"></div>
+                <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
+                    <div class="row">
+                        <div class="col">
+                            <p:outputLabel value="Olá, #{userMB.user.firstName}!" />
+                        </div>
+                    </div>
+                </h:panelGroup>
 
-                    <div class="col-4" style="text-align: right;">
-                        <p style="display: inline;">Não possui uma conta? </p>
-                        <p:commandButton class="btn btn-primary" value="Cadastre-se" action="signup.xhtml?faces-redirect=true" />
+                <div class="row" style="margin-bottom: -0.5rem;">
+                    <div class="col">
+                        <hr />
                     </div>
                 </div>
-            </h:panelGroup>
 
-            <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
+                <div class="row row-spaced" style="margin-bottom: -0.5rem;">
+                    <div class="col" align="center">
+                        <h4 style="display: inline;">Descrição do trabalho</h4>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col">
-                        <p:outputLabel value="Olá, ${userMB.user.firstName}!" />
+                        <hr />
                     </div>
                 </div>
-            </h:panelGroup>
 
-            <div class="row" style="margin-bottom: -0.5rem;">
-                <div class="col">
-                    <hr />
-                </div>
-            </div>
+                <h:panelGroup>
+                    <h:panelGroup id="pg-job-edit">
+                        <div class="row row-spaced">
+                            <div class="col">
+                                <p:inputText id="title" label="Título do trabalho" class="form-control" value="#{jobMB.job.title}" pt:placeholder="Título do trabalho" readonly="#{!jobMB.isJobMine(jobMB.job)}" required="true"/>
+                                <p:messages for="title" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
+                            </div>
+                        </div>
+                        <div class="row row-spaced">
+                            <div class="col">
+                                <p:inputTextarea id="description" label="Descrição do trabalho" class="form-control" value="#{jobMB.job.description}" pt:placeholder="Descrição do trabalho" readonly="#{!jobMB.isJobMine(jobMB.job)}" required="true"/>
+                                <p:messages for="description" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
+                            </div>
+                        </div>
+                        <div class="row row-spaced">
+                            <div class="col-3">
+                                <p:inputText id="amountPerHour" label="Valor por hora" class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" readonly="#{!jobMB.isJobMine(jobMB.job)}" required="true" />
+                                <p:messages for="amountPerHour" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
+                            </div>
+                        </div>
+                        <div class="row row-spaced">
+                            <div class="col-3" >
+                                <h5 style="display: inline; line-height: 2rem;">Contratante: </h5>
+                                <p:outputLabel value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}"  />
+                            </div>
+                        </div>       
+                        <div class="row row-spaced">
+                            <div class="col-3" >
+                                <h:panelGroup rendered="#{jobMB.job.acceptedHiree != null}">
+                                    <h5 style="display: inline; line-height: 2rem;">Contratado: </h5>
+                                    <p:outputLabel value="#{jobMB.job.acceptedHiree.firstName} #{jobMB.job.acceptedHiree.lastName}"  />
+                                </h:panelGroup>   
+                            </div>
+                        </div>       
+                        <div class="row row-spaced">
+                            <div class="col-3" >
+                                <h5 style="display: inline; line-height: 2rem;">Status: </h5>
+                                <p:outputLabel value="#{jobMB.getJobStatus(jobMB.job)}"  />
+                            </div>
+                        </div>
 
-            <div class="row row-spaced" style="margin-bottom: -0.5rem;">
-                <div class="col" align="center">
-                    <h4 style="display: inline;">Descrição do trabalho</h4>
-                </div>
-            </div>
+                        <div class="row">
+                            <div class="col">
+                                <hr />
+                            </div>
+                        </div>
 
-            <div class="row">
-                <div class="col">
-                    <hr />
-                </div>
-            </div>
+                        <div class="row">
+                            <div class="col" align="center">
+                                <h5>Lista de candidatos</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <hr />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p:dataTable id="table-hirees" value="#{jobMB.job.hirees}" var="hiree" styleClass="table table-bordered table-striped"
+                                             rows="10"
+                                             emptyMessage="Não há registros"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="10,20,35">
+                                    <p:column width="40%">
+                                        <f:facet name="header">Nome</f:facet>
+                                        <h:commandLink value="#{hiree.firstName} #{hiree.lastName}" action="jobdetails.xhtml?faces-redirect=true" />
+                                    </p:column>
+                                    <p:column width="40%">
+                                        <f:facet name="header">E-mail</f:facet>
+                                        <h:outputText value="#{hiree.email}" />
+                                    </p:column>
+                                    <p:column rendered="#{jobMB.isJobMine(jobMB.job)}">
+                                        <p:commandButton  class="btn btn-success min-width-150" value="#{jobMB.isJobAssigned(jobMB.job)? (jobMB.isJobAssignedTo(hiree, jobMB.job)? 'Contratado(a)': 'Não contratado(a)') : 'Contratar'}" actionListener="#{jobMB.acceptHiree(hiree)}" rendered="#{jobMB.isJobMine(jobMB.job)}" disabled="#{jobMB.isJobAssigned(jobMB.job)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </div>
+                    </h:panelGroup>
 
-            <h:form>
-                <h:panelGroup id="pg-job-edit">
+                    <h:panelGroup id="messages">
+                        <p:messages globalOnly="true" styleClass="validation-message" showIcon="true" autoUpdate="true"></p:messages>
+                    </h:panelGroup>
+
                     <div class="row row-spaced">
-                        <div class="col">
-                            <p:inputText class="form-control" value="#{jobMB.job.title}" pt:placeholder="Título do trabalho" readonly="#{!jobMB.isJobMine(jobMB.job)}"/>
+                        <div class="col-2">
+                            <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{jobMB.back()}" immediate="true"/>
                         </div>
-                    </div>
-                    <div class="row row-spaced">
-                        <div class="col">
-                            <p:inputTextarea class="form-control" value="#{jobMB.job.description}" pt:placeholder="Descrição do trabalho" readonly="#{!jobMB.isJobMine(jobMB.job)}"/>
+                        <div class="col-6"></div>
+                        <div class="col-2">
+                            <p:commandButton class="btn btn-block btn-secondary" value="Remover" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isJobMine(jobMB.job) and userMB.isAuthorized() and jobMB.isJobPersisted(jobMB.job)}"/>
+                            <p:commandButton class="btn btn-block btn-secondary" value="Desistir" actionListener="#{jobMB.setJobAsCanceledByHiree(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
                         </div>
-                    </div>
-                    <div class="row row-spaced">
-                        <div class="col-3">
-                            <p:inputText class="form-control" value="#{jobMB.job.amountPerHour}" pt:placeholder="Valor por hora" readonly="#{!jobMB.isJobMine(jobMB.job)}" />
-                        </div>
-                    </div>
-                    <div class="row row-spaced">
-                        <div class="col-3" >
-                            <h5 style="display: inline; line-height: 2rem;">Contratante: </h5>
-                            <p:outputLabel value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}"  />
-                        </div>
-                    </div>               
-                    <div class="row row-spaced">
-                        <div class="col-3" >
-                            <h5 style="display: inline; line-height: 2rem;">Status: </h5>
-                            <p:outputLabel value="#{jobMB.getJobStatus(jobMB.job)}"  />
+                        <div class="col-2">
+                            <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized() and jobMB.isJobMine(jobMB.job)}" update="pg-job-edit"/>
+                            <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
+                            <p:commandButton class="btn btn-success min-width-150" 
+                                             value="#{jobMB.isJobRequestedByMe(jobMB.job)? 'Em análise' : 'Candidatar-se'}" 
+                                             actionListener="#{jobMB.addJobRequest(jobMB.job)}" 
+                                             rendered="#{userMB.isAuthorized() and jobMB.isJobPersisted(jobMB.job) and !jobMB.isJobMine(jobMB.job) and !jobMB.isJobAssigned(jobMB.job) }" 
+                                             disabled="#{jobMB.isJobRequestedByMe(jobMB.job) or jobMB.isJobMine(jobMB.job)}" />
+
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col">
-                            <hr />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col" align="center">
-                            <h5>Lista de candidatos</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <hr />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p:dataTable id="table-hirees" value="#{jobMB.job.hirees}" var="hiree" styleClass="table table-bordered table-striped"
-                                         rows="10"
-                                         emptyMessage="Não há registros"
-                                         paginator="true"
-                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="10,20,35">
-                                <p:column width="40%">
-                                    <f:facet name="header">Nome</f:facet>
-                                    <h:commandLink value="#{hiree.firstName} #{hiree.lastName}" action="jobdetails.xhtml?faces-redirect=true" />
-                                </p:column>
-                                <p:column width="40%">
-                                    <f:facet name="header">E-mail</f:facet>
-                                    <h:outputText value="#{hiree.email}" />
-                                </p:column>
-                                <p:column rendered="#{jobMB.isJobMine(jobMB.job)}">
-                                    <p:commandButton class="btn btn-success" value="#{jobMB.isJobAssigned(jobMB.job)? (jobMB.isJobAssignedTo(hiree, jobMB.job)? 'Contratado(a)': 'Não contratado(a)') : 'Contratar'}" actionListener="#{jobMB.acceptHiree(hiree)}" rendered="#{jobMB.isJobMine(jobMB.job)}" disabled="#{jobMB.isJobAssigned(jobMB.job)}"/>
-                                </p:column>
-                            </p:dataTable>
-                        </div>
-                    </div>
                 </h:panelGroup>
-
-                <h:panelGroup id="messages">
-                    <p:messages globalOnly="true" styleClass="validation-message" showIcon="true" autoUpdate="true"></p:messages>
-                </h:panelGroup>
-
-                <div class="row row-spaced">
-                    <div class="col-2">
-                        <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{jobMB.back()}" immediate="true"/>
-                    </div>
-                    <div class="col-6"></div>
-                    <div class="col-2">
-                        <p:commandButton class="btn btn-block btn-secondary" value="Remover" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isJobMine(jobMB.job) and userMB.isAuthorized() and jobMB.isJobPersisted(jobMB.job)}"/>
-                        <p:commandButton class="btn btn-block btn-secondary" value="Desistir" actionListener="#{jobMB.setJobAsCanceledByHiree(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
-                    </div>
-                    <div class="col-2">
-                        <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized() and jobMB.isJobMine(jobMB.job)}"/>
-                        <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
-                        <p:commandButton class="btn btn-success min-width-150" 
-                                         value="#{jobMB.isJobRequestedByMe(job)? 'Em análise' : 'Candidatar-se'}" 
-                                         actionListener="#{jobMB.addJobRequest(job)}" 
-                                         rendered="#{userMB.isAuthorized()}" 
-                                         disabled="${jobMB.isJobRequestedByMe(job) or jobMB.isJobMine(job)}" />
-
+                <div class="row">
+                    <div class="col">
+                        <hr />
                     </div>
                 </div>
-
-            </h:form>
-            <div class="row">
-                <div class="col">
-                    <hr />
+                <div class="row">
+                    <div class="col" align="center">
+                        <p>Autores: Fabricio M. Somini e Guilherme C. Milak</p>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col" align="center">
-                    <p>Autores: Fabricio M. Somini e Guilherme C. Milak</p>
-                </div>
-            </div>
-        </div>        
+            </div>    
+        </h:form>
     </h:body>
 </html>
 

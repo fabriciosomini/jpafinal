@@ -91,19 +91,27 @@ public class JobMB extends BaseMB {
 
     public boolean isJobRequestedByMe(Job j) {
         User currentUser = UserMB.getINSTANCE().getUser();
-        List<User> hirees = j.getHirees();
-        boolean isJobRequestedByMe = hirees
-                .stream()
-                .filter(h -> h.getId() == currentUser.getId())
-                .count() > 0;
+        boolean isJobRequestedByMe = false;
+
+        if (j != null) {
+            List<User> hirees = j.getHirees();
+            isJobRequestedByMe = hirees
+                    .stream()
+                    .filter(h -> h.getId() == currentUser.getId())
+                    .count() > 0;
+
+        }
         return isJobRequestedByMe;
     }
 
     public boolean isJobMine(Job j) {
         verifyAuthorization();
         User currentUser = UserMB.getINSTANCE().getUser();
-        User hirer = j.getHirer();
-        boolean isMine = j.getId() == 0 ? true : (hirer == null ? false : hirer.getId() == currentUser.getId());
+        boolean isMine = false;
+        if (j != null) {
+            User hirer = j.getHirer();
+            isMine = j.getId() == 0 ? true : (hirer == null ? false : hirer.getId() == currentUser.getId());
+        }
         return isMine;
     }
 
@@ -227,7 +235,7 @@ public class JobMB extends BaseMB {
 
         return jobStatus;
     }
-    
+
     public String getButtonJobStatus(Job j) {
         JobStatusType status = j.getJobStatusType();
         if (status == null) {
@@ -236,9 +244,9 @@ public class JobMB extends BaseMB {
         String jobStatus = "";
         switch (status) {
             case NOT_STARTED:
-                if(isJobAssigned(j)){
+                if (isJobAssigned(j)) {
                     jobStatus = "Não iniciado";
-                }else{
+                } else {
                     jobStatus = "Cadastrar-se";
                 }
                 break;
