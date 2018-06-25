@@ -2,6 +2,7 @@
     $(function () {
         $("[data-toggle=popover]").popover({
             html: true,
+            placement: "bottom",
             content: function () {
                 return $('.popover-body').html();
             },

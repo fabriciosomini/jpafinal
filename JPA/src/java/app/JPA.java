@@ -11,8 +11,12 @@ public class JPA {
             emf = Persistence.createEntityManagerFactory(
                     "JPAPU");
         }
-        
         return emf.createEntityManager();
+    }
+    
+    public static void close(){
+        getEM().close();
+        emf = null;
     }
     
 }
