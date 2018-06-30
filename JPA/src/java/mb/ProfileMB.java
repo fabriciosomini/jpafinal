@@ -28,7 +28,7 @@ import repository.JobRepository;
 @Named(value = "profileMB")
 @ManagedBean
 @SessionScoped
-public class ProfileMB {
+public class ProfileMB extends BaseMB{
 
     private User profile;
     private List<Job> jobs;
@@ -48,6 +48,7 @@ public class ProfileMB {
     }
 
     public void loadProfile(User p) {
+        verifyAuthorization();
         this.profile = p;
         MultiMap<String, Object> params = new MultiMap<>();
         params.put("acceptedHiree.id", p.getId());
@@ -61,6 +62,7 @@ public class ProfileMB {
     }
 
     public double getIncome() {
+        verifyAuthorization();
         double income = jobs == null ? 0 : jobs.stream()
                 .filter(k -> k.getJobStatusType() == JobStatusType.APPROVED.getValue())
                 .mapToDouble(j -> j.getAmountPerHour()).sum();
@@ -68,6 +70,7 @@ public class ProfileMB {
     }
 
     public float getSuccessRate() {
+        verifyAuthorization();
         float successRate = 0;
 
         if (jobs != null) {

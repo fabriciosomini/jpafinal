@@ -15,6 +15,7 @@ import model.NotificationType;
 import entity.User;
 import helper.MessageHelper;
 import helper.NavigationHelper;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import model.JobStatusType;
@@ -28,7 +29,7 @@ import repository.JobRepository;
 @Named(value = "jobMB")
 @ManagedBean
 @SessionScoped
-public class JobMB extends BaseMB {
+public class JobMB extends BaseMB{
 
     private static JobMB INSTANCE;
 

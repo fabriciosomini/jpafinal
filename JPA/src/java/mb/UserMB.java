@@ -20,6 +20,7 @@ import helper.SessionHelper;
 import helper.IdHelper;
 import helper.MessageHelper;
 import helper.NavigationHelper;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
@@ -36,12 +37,11 @@ import repository.UserRepository;
 @Named(value = "userMB")
 @ManagedBean
 @SessionScoped
-public class UserMB {
+public class UserMB extends BaseMB{
 
     private static UserMB INSTANCE;
     private User user;
     private Authentication authentication;
-    private String tokenName = "AUTHTOKEN";
 
     @PostConstruct
     public void init() {

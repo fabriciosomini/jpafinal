@@ -6,12 +6,13 @@
 package mb;
 
 import helper.NavigationHelper;
+import java.io.Serializable;
 
 /**
  *
  * @author fabri
  */
-public class BaseMB {
+public class BaseMB implements Serializable {
 
     public void verifyAuthorization() {
 

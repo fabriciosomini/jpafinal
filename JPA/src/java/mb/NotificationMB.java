@@ -31,7 +31,7 @@ import repository.NotificationRepository;
 @Named(value = "notificationMB")
 @ManagedBean
 @SessionScoped
-public class NotificationMB extends BaseMB implements Serializable {
+public class NotificationMB extends BaseMB{
 
     private static NotificationMB INSTANCE;
     private List<Notification> notifications;
@@ -47,14 +47,16 @@ public class NotificationMB extends BaseMB implements Serializable {
     public static NotificationMB getINSTANCE() {
         return INSTANCE;
     }
-    
-    public void refresh(){
-        if(UserMB.getINSTANCE().isAuthorized()){
+
+    public void refresh() {
+        System.out.println("Refresh");
+        if (UserMB.getINSTANCE().isAuthorized()) {
             getNotifications();
         }
     }
 
     public List<Notification> getNotifications() {
+        System.out.println("getNotifications");
         verifyAuthorization();
         UserMB userMB = UserMB.getINSTANCE();
         if (userMB != null) {
@@ -109,7 +111,7 @@ public class NotificationMB extends BaseMB implements Serializable {
 
     public int notificationCount() {
         verifyAuthorization();
-        
+
         return getNotifications().size();
     }
 
