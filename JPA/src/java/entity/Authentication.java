@@ -26,6 +26,8 @@ public class Authentication implements Serializable {
     @GeneratedValue
     private int id;
     private String sessionId;
+    
+    //Usuário autenticado
     @ManyToOne
     private User user;
 

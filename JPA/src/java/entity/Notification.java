@@ -29,10 +29,16 @@ public class Notification implements Serializable {
     private int id;
     private String description;
     private int notificationType;
+    
+    //Trabalho da notificação
     @ManyToOne
     private Job job;
+    
+    //Contratador da notificação
     @ManyToOne
     private User hirer;
+    
+    //Contratado da notificação
     @ManyToOne
     private User hiree;
 

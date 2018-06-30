@@ -16,7 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import model.JobStatusType;
 
 /**
  *
@@ -24,7 +23,7 @@ import model.JobStatusType;
  */
 @Entity
 @Table(name = "JOB")
-public class Job implements Serializable{
+public class Job implements Serializable {
 
     @Id
     @GeneratedValue
@@ -32,7 +31,25 @@ public class Job implements Serializable{
     private String title;
     private String description;
     private float amountPerHour;
+    
+    //Estado atual do trabalho
     private int jobStatusType;
+    
+    //Contratador
+    @ManyToOne
+    private User hirer;
+    
+    //Candidato contratado
+    @ManyToOne
+    private User acceptedHiree;
+    
+    //Candidatos
+    @ManyToMany
+    private List<User> hirees;
+
+    public Job() {
+        hirees = new ArrayList<>();
+    }
 
     public int getJobStatusType() {
         return jobStatusType;
@@ -50,17 +67,6 @@ public class Job implements Serializable{
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
-    }
-    @ManyToOne
-    private User hirer;
-    @ManyToOne
-    private User acceptedHiree;
-    @ManyToMany
-    private List<User> hirees;
-    
-
-    public Job() {
-        hirees = new ArrayList<>();
     }
 
     public User getAcceptedHiree() {
@@ -115,16 +121,14 @@ public class Job implements Serializable{
         return this.id == baseModel.getId();
     }
 
-  
     public int getId() {
         return id;
     }
 
-    
     public void setId(int id) {
         this.id = id;
     }
-    
+
     @Override
     public final int hashCode() {
         return IdHelper.generateId();

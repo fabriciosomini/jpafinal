@@ -24,12 +24,6 @@ import javax.persistence.Table;
 @Table(name = "USER")
 public class User implements Serializable {
 
-    @OneToMany(mappedBy = "user")
-    private List<Authentication> authentications;
-
-    @ManyToOne
-    private Job job;
-
     @Id
     @GeneratedValue
     private int id;
@@ -38,8 +32,20 @@ public class User implements Serializable {
     private String nationalIdentity;
     private String email;
     private String password;
+
+    //BANCO
+    @OneToMany(mappedBy = "user")
+    private List<Authentication> authentications;
+
+    //BANCO
+    @ManyToOne
+    private Job job;
+
+    //BANCO
     @OneToMany
     private List<Notification> notifications;
+
+    //BANCO
     @ManyToMany
     private List<Job> jobs;
 
