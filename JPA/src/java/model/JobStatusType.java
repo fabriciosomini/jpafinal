@@ -10,6 +10,7 @@ package model;
  * @author fabri
  */
 public enum JobStatusType {
+    UNASSIGNED (-1),
     NOT_STARTED(0),
     STARTED(1),
     CANCELED_BY_HIREE(2),

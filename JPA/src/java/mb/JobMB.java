@@ -18,6 +18,7 @@ import helper.NavigationHelper;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import model.JobStatusType;
+import model.MultiMap;
 import repository.JobRepository;
 
 /**
@@ -28,6 +29,12 @@ import repository.JobRepository;
 @ManagedBean
 @SessionScoped
 public class JobMB extends BaseMB {
+
+    private static JobMB INSTANCE;
+
+    private static JobMB getINSTANCE() {
+        return INSTANCE;
+    }
 
     private List<Job> jobs;
     private Job job;
@@ -44,6 +51,7 @@ public class JobMB extends BaseMB {
 
     public List<Job> getJobs() {
         verifyAuthorization();
+       
         jobs = JobRepository.getAll();
         return jobs;
     }
@@ -58,7 +66,7 @@ public class JobMB extends BaseMB {
 
         jobs = JobRepository.getAll();
         job = job == null ? new Job() : job;
-
+        INSTANCE = this;
     }
 
     public void addJobRequest(Job job) {
@@ -138,6 +146,7 @@ public class JobMB extends BaseMB {
         verifyAuthorization();
         User hirer = UserMB.getINSTANCE().getUser();
         job = new Job();
+        job.setJobStatusType(JobStatusType.UNASSIGNED);
         job.setHirer(hirer);
     }
 
@@ -247,14 +256,14 @@ public class JobMB extends BaseMB {
                 if (isJobAssigned(j)) {
                     jobStatus = "Não iniciado";
                 } else {
-                    jobStatus = "Cadastrar-se";
+                    jobStatus = "Candidatar-se";
                 }
                 break;
             case CANCELED_BY_HIREE:
                 jobStatus = "Cancelado";
                 break;
             case CANCELED_BY_HIRER:
-                jobStatus = "Desistido";
+                jobStatus = "Renunciado";
                 break;
             case DONE:
                 jobStatus = "Concluído";
@@ -276,4 +285,103 @@ public class JobMB extends BaseMB {
                 && j.getAcceptedHiree().getId() == hiree.getId();
     }
 
+    public boolean isRenderedRequestJobButton(Job j) {
+        boolean isRenderRequestJob = false;
+        UserMB userMB = UserMB.getINSTANCE();
+        JobMB jobMB = JobMB.getINSTANCE();
+        if (userMB != null && jobMB != null) {
+            boolean isAuthorized = userMB.isAuthorized();
+            boolean isJobPersisted = jobMB.isJobPersisted(j);
+            boolean isJobMine = jobMB.isJobMine(j);
+            boolean isJobAssignedTo = jobMB.isJobAssignedTo(userMB.getUser(), j);
+            //Mostrar se: estiver autorizado E o trabalho está no banco 
+            //E não foi criado por mim
+            isRenderRequestJob = isAuthorized && isJobPersisted && !isJobMine && !isJobAssignedTo;
+        }
+        return isRenderRequestJob;
+    }
+
+    public boolean isDisabledRequestJobButton(Job j) {
+        boolean isDisabledRequestJobButton = false;
+        UserMB userMb = UserMB.getINSTANCE();
+        JobMB jobMB = JobMB.getINSTANCE();
+        if (userMb != null && jobMB != null) {
+            JobStatusType jobStatusType = j.getJobStatusType();
+            boolean isAuthorized = userMb.isAuthorized();
+            boolean isJobRequestedByMe = jobMB.isJobRequestedByMe(j);
+            boolean isJobMine = jobMB.isJobMine(j);
+            boolean isJobCanceledByHiree = jobStatusType == JobStatusType.CANCELED_BY_HIREE;
+            boolean isJobCanceledByHirer = jobStatusType == JobStatusType.CANCELED_BY_HIRER;
+            boolean isJobDone = jobStatusType == JobStatusType.DONE;
+            isDisabledRequestJobButton = (isJobRequestedByMe || isJobMine)
+                    || (isJobCanceledByHiree || isJobCanceledByHirer || isJobDone);
+        }
+        return isDisabledRequestJobButton;
+    }
+
+    public boolean isRenderedRemoveJobButton(Job j) {
+
+        boolean isRenderedRemoveJobButton = false;
+        UserMB userMb = UserMB.getINSTANCE();
+        JobMB jobMB = JobMB.getINSTANCE();
+        if (userMb != null && jobMB != null) {
+            JobStatusType jobStatusType = j.getJobStatusType();
+            boolean isAuthorized = userMb.isAuthorized();
+            boolean isJobPersisted = jobMB.isJobPersisted(j);
+            boolean isJobMine = jobMB.isJobMine(j);
+            boolean isJobCanceledByHiree = jobStatusType == JobStatusType.CANCELED_BY_HIREE;
+            boolean isJobCanceledByHirer = jobStatusType == JobStatusType.CANCELED_BY_HIRER;
+            boolean isJobDone = jobStatusType == JobStatusType.DONE;
+
+            isRenderedRemoveJobButton = isAuthorized && isJobPersisted && isJobMine
+                    && (!isJobCanceledByHiree || !isJobCanceledByHirer || !isJobDone);
+        }
+        return isRenderedRemoveJobButton;
+    }
+
+    public boolean isRenderedCancelJobButton(Job j) {
+
+        boolean isRenderedCancelJobButton = false;
+        UserMB userMb = UserMB.getINSTANCE();
+        JobMB jobMB = JobMB.getINSTANCE();
+        if (userMb != null && jobMB != null) {
+            JobStatusType jobStatusType = j.getJobStatusType();
+            boolean isAuthorized = userMb.isAuthorized();
+            boolean isJobGrantedToMe = jobMB.isJobGrantedToMe(j);
+            boolean isJobMine = jobMB.isJobMine(j);
+            boolean isJobCanceledByHiree = jobStatusType == JobStatusType.CANCELED_BY_HIREE;
+            boolean isJobCanceledByHirer = jobStatusType == JobStatusType.CANCELED_BY_HIRER;
+            boolean isJobDone = jobStatusType == JobStatusType.DONE;
+
+            isRenderedCancelJobButton = isAuthorized && isJobGrantedToMe && isJobMine
+                    && (!isJobCanceledByHiree || !isJobCanceledByHirer || !isJobDone);
+        }
+        return isRenderedCancelJobButton;
+    }
+
+    public String getRequestJobButtonText(Job j) {
+
+        String requestJobButtonText = "";
+        UserMB userMb = UserMB.getINSTANCE();
+        JobMB jobMB = JobMB.getINSTANCE();
+        if (userMb != null && jobMB != null) {
+            boolean isJobMine = jobMB.isJobMine(j);
+            boolean isJobRequestedByMe = jobMB.isJobRequestedByMe(j);
+            boolean isJobAssigned = jobMB.isJobAssigned(j);
+            if (isJobMine) {
+                if (isJobAssigned) {
+                    requestJobButtonText = "Atribuído";
+                } else {
+                    requestJobButtonText = "Candidatos: " + jobMB.hireesCount(j);
+                }
+            } else {
+                if (isJobRequestedByMe && !isJobAssigned) {
+                    requestJobButtonText = "Em análise";
+                } else {
+                    requestJobButtonText = jobMB.getButtonJobStatus(j);
+                }
+            }
+        }
+        return requestJobButtonText;
+    }
 }

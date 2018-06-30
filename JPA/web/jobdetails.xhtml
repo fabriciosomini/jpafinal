@@ -169,17 +169,17 @@
                         </div>
                         <div class="col-6"></div>
                         <div class="col-2">
-                            <p:commandButton class="btn btn-block btn-secondary" value="Remover" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isJobMine(jobMB.job) and userMB.isAuthorized() and jobMB.isJobPersisted(jobMB.job)}"/>
-                            <p:commandButton class="btn btn-block btn-secondary" value="Desistir" actionListener="#{jobMB.setJobAsCanceledByHiree(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
+                            <p:commandButton class="btn btn-block btn-secondary" value="Remover" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isRenderedRemoveJobButton(jobMB.job)}"/>
+                            <p:commandButton class="btn btn-block btn-secondary" value="Desistir" actionListener="#{jobMB.setJobAsCanceledByHiree(jobMB.job)}" rendered="#{jobMB.isRenderedCancelJobButton(jobMB.job)}"/>
                         </div>
                         <div class="col-2">
                             <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{userMB.isAuthorized() and jobMB.isJobMine(jobMB.job)}" update="pg-job-edit"/>
                             <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isJobGrantedToMe(jobMB.job) and userMB.isAuthorized()}"/>
                             <p:commandButton class="btn btn-success min-width-150" 
-                                             value="#{jobMB.isJobRequestedByMe(jobMB.job)? 'Em análise' : 'Candidatar-se'}" 
+                                             value="#{jobMB.getRequestJobButtonText(jobMB.job)}" 
                                              actionListener="#{jobMB.addJobRequest(jobMB.job)}" 
-                                             rendered="#{userMB.isAuthorized() and jobMB.isJobPersisted(jobMB.job) and !jobMB.isJobMine(jobMB.job) and !jobMB.isJobAssigned(jobMB.job) }" 
-                                             disabled="#{jobMB.isJobRequestedByMe(jobMB.job) or jobMB.isJobMine(jobMB.job)}" />
+                                             rendered="#{jobMB.isRenderedRequestJobButton(jobMB.job)}" 
+                                             disabled="#{jobMB.isDisabledRequestJobButton(jobMB.job)}" />
 
                         </div>
                     </div>
