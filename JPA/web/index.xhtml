@@ -26,20 +26,20 @@
     </h:head>
     <h:body>
         <!-- #################################### DIV POPOVER DE NOTIFICAÇÕES #################################### -->
-       
+
         <div class="popover-body" style="display: none;">
             <h:form>
                 <ul>
                     <h:panelGroup rendered="#{notificationMB.isEmpty()}">Não há notificações</h:panelGroup>
                     <c:forEach var="notification" items="#{notificationMB.notifications}">
-                        <li><div class="row">
+                        <li>
+                            <div class="row">
                                 <div class="col-10">
                                     <p:commandLink  actionListener="#{jobMB.edit(notification.job)}"
                                                     value="#{notification.description}" ajax="false"/>
                                 </div>
                                 <div class="col-1">
-                                    <p:commandLink class="close" ajax="false" actionListener="#{notificationMB.removeNotification(notification)}">&times;
-                                    </p:commandLink>
+                                    <p:commandLink class="close" ajax="false" actionListener="#{notificationMB.removeNotification(notification)}">&times;</p:commandLink>
                                 </div>
                             </div>
                         </li>
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="col-4" style="text-align: right;">  
-                            <p class="label-inline label-side-margin">Não possui uma conta?</p>                         
+                            <p class="label-inline label-side-margin">Não possui uma conta?</p>
                             <p:commandButton class="btn btn-primary" value="Cadastre-se" action="#{userMB.newUser()}" immediate="true"/>    
                         </div>
                     </div>
@@ -94,28 +94,19 @@
             <h:panelGroup id="pg-user-logged" rendered="#{userMB.authorized}">
                 <h:form id="form">
                     <div class="row">
-                        <div class="col-3">
-
-                            <div class="panel-group" style="position: absolute">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" href="#collapse1"><p:outputLabel value="Olá, ${userMB.user.firstName}!" /></a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapse1" class="panel-collapse collapse">
-                                        <ul class="list-group">
-                                            <li class="list-group-item">
-                                                <p:commandLink 
-                                                    actionListener="#{userMB.disconnect()}"
-                                                    value="Sair" ajax="false"/>
-                                            </li>
-                                        </ul>
-                                    </div>
+                        <div class="col-4">
+                            <div class="dropdown">  
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <p:outputLabel value="Olá, #{userMB.user.firstName}!" />
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <p:commandButton class="dropdown-item" value="Perfil" actionListener="#{profileMB.loadProfile(userMB.user)}" />
+                                    <hr style="margin: 0.5rem 0" />
+                                    <p:commandButton class="dropdown-item" value="Sair" actionListener="#{userMB.disconnect()}" />
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6"></div>
+                        <div class="col-5"></div>
                         <div class="col-3" align="center">
                             <p:commandButton class="btn btn-block btn-primary" value="Adicionar trabalho" actionListener="#{jobMB.newJob()}" action="jobdetails.xhtml?faces-redirect=true" rendered="#{userMB.authorized}" />
                         </div>
@@ -123,24 +114,26 @@
                 </h:form>
             </h:panelGroup>
 
-            <div class="row" style="margin-bottom: -0.5rem;">
+            <div class="row vert-top-spaced">
+                <div class="col">
+                    <a data-toggle="popover" id="notifications-btn" title="Notificações" data-placement="bottom" data-content="" style="float: right;"> 
+                        <h:form>
+                            <p:outputLabel id="notification-count" class="btn btn-notification" value="#{notificationMB.notificationCount()}" rendered="#{userMB.authorized}" />
+                        </h:form>
+                    </a>
+                </div>                
+            </div>
+
+            <div class="row">
                 <div class="col">
                     <hr />
                 </div>
             </div>
 
-            <div class="row row-spaced" style="margin-bottom: -0.5rem;">
-
-                <div class="col" align="center">                    
+            <div class="row">
+                <div class="col" align="center">
                     <h3 style="display: inline;">Lista de trabalhos</h3>
-
-                    <a data-toggle="popover" id="notifications-btn" title="Notificações" data-placement="bottom" data-content="" style="float: right;"> 
-                        <h:form>
-                            <p:outputLabel id="notification-count" class="btn btn-notification" value="#{notificationMB.notificationCount()}" rendered="#{userMB.authorized}"  />                 
-                        </h:form>
-                    </a>                              
                 </div>
-
             </div>
 
             <div class="row">
@@ -158,26 +151,26 @@
                                      emptyMessage="Não há registros"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="10,20,35">
-                            <p:column width="45%">
+                            <p:column width="45%" class="align-middle">
                                 <f:facet name="header">Trabalho</f:facet>
                                 <h:commandLink value="#{job.title}" action="jobdetails.xhtml?faces-redirect=true" actionListener="#{jobMB.edit(job)}" />
                             </p:column>
-                            <p:column>
+                            <p:column class="align-middle">
                                 <f:facet name="header">Valor por hora</f:facet>
                                 <h:outputText value="#{job.amountPerHour}" />
                             </p:column>
-                            <p:column>
+                            <p:column class="align-middle">
                                 <f:facet name="header">Contratante</f:facet>
                                 <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
                             </p:column>
-                            <p:column rendered="#{userMB.authorized}">
-                                <p:commandButton class="btn btn-success min-width-150" 
+                            <p:column rendered="#{userMB.authorized}" class="align-middle">
+                                <p:commandButton class="btn btn-block btn-success" 
                                                  value="#{jobMB.getRequestJobButtonText(job)}" 
                                                  actionListener="#{jobMB.addJobRequest(job)}" 
                                                  rendered="#{jobMB.isRenderedRequestJobButton(job)}" 
                                                  disabled="${jobMB.isDisabledRequestJobButton(job)}" />
                                 <p:outputLabel rendered="#{!jobMB.isRenderedRequestJobButton(job)}" 
-                                               value="#{jobMB.getRequestJobButtonText(job)}"></p:outputLabel>
+                                               value="#{jobMB.getRequestJobButtonText(job)}" class="align-middle" />
                             </p:column>
                         </p:dataTable>
                     </h:form>  
@@ -197,4 +190,3 @@
         </div>        
     </h:body>
 </html>
-

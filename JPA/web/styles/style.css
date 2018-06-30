@@ -18,6 +18,10 @@ body {
     margin-right: 0.2rem;
 }
 
+.vert-top-spaced {
+    margin-top: 1rem;
+}
+
 .btn-notification {
     float: right;
     display: inline;

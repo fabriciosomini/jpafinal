@@ -54,26 +54,28 @@
 
                 <h:panelGroup id="pg-user-logged" rendered="#{userMB.authorized}">
                     <div class="row">
-                        <div class="col">
-                            <p:outputLabel value="Olá, #{userMB.user.firstName}!" />
+                        <div class="col-3">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <p:outputLabel value="Olá, #{userMB.user.firstName}!" />
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <p:commandButton class="dropdown-item" value="Sair" action="#{userMB.disconnect()}" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </h:panelGroup>
 
-                <div class="row" style="margin-bottom: -0.5rem;">
+                <div class="row">
                     <div class="col">
                         <hr />
                     </div>
                 </div>
 
-                <div class="row row-spaced" style="margin-bottom: -0.5rem;">
+                <div class="row">
                     <div class="col" align="center">
                         <h4 style="display: inline;">Descrição do trabalho</h4>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
                         <hr />
                     </div>
                 </div>
@@ -104,7 +106,7 @@
                                 <p:outputLabel value="#{jobMB.job.hirer.firstName} #{jobMB.job.hirer.lastName}"  />
                             </div>
                         </div>       
-                        <div class="row row-spaced">
+                        <div class="row">
                             <div class="col-3" >
                                 <h:panelGroup rendered="#{jobMB.job.acceptedHiree != null}">
                                     <h5 style="display: inline; line-height: 2rem;">Contratado(a): </h5>
@@ -112,8 +114,8 @@
                                 </h:panelGroup>   
                             </div>
                         </div>       
-                        <div class="row row-spaced">
-                            <div class="col-3" >
+                        <div class="row">
+                            <div class="col-5" >
                                 <h5 style="display: inline; line-height: 2rem;">Status: </h5>
                                 <p:outputLabel value="#{jobMB.getJobStatus(jobMB.job)}"  />
                             </div>
@@ -128,31 +130,28 @@
                         <div class="row">
                             <div class="col" align="center">
                                 <h5>Lista de candidatos</h5>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
                                 <hr />
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col">
                                 <p:dataTable id="table-hirees" value="#{jobMB.job.hirees}" var="hiree" styleClass="table table-bordered table-striped"
                                              rows="10"
-                                             emptyMessage="Não há registros"
+                                             emptyMessage="Não há candidatos cadastrados!"
                                              paginator="true"
                                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="10,20,35">
-                                    <p:column width="40%">
+                                    <p:column width="40%" class="align-middle">
                                         <f:facet name="header">Nome</f:facet>
                                         <h:commandLink value="#{hiree.firstName} #{hiree.lastName}" actionListener="#{profileMB.loadProfile(hiree)}"  />
                                     </p:column>
-                                    <p:column width="40%">
+                                    <p:column width="40%" class="align-middle">
                                         <f:facet name="header">E-mail</f:facet>
                                         <h:outputText value="#{hiree.email}" />
                                     </p:column>
-                                    <p:column rendered="#{jobMB.isJobMine(jobMB.job)}">
-                                        <p:commandButton  class="btn btn-success min-width-150" 
+                                    <p:column rendered="#{jobMB.isJobMine(jobMB.job)}" class="align-middle">
+                                        <p:commandButton  class="btn btn-block btn-success" 
                                                           value="#{jobMB.isJobAssigned(jobMB.job)? (jobMB.isJobAssignedTo(hiree, jobMB.job)? 'Contratado(a)': 'Não contratado(a)') : 'Contratar'}" 
                                                           actionListener="#{jobMB.acceptHiree(hiree)}" 
                                                           rendered="#{jobMB.isRenderedSetHireeButton(jobMB.job)}" 
@@ -183,7 +182,7 @@
                             <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{jobMB.isRenderedUpdateJobButton(jobMB.job)}" update="pg-job-edit"/>
                             <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobDoneButton(jobMB.job)}"/>
                             <p:commandButton class="btn btn-block btn-primary" value="Iniciar trabalho" actionListener="#{jobMB.setJobAsStarted(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobStartedButton(jobMB.job)}"/>
-                            <p:commandButton class="btn btn-success min-width-150" 
+                            <p:commandButton class="btn btn-block btn-success" 
                                              value="#{jobMB.getRequestJobButtonText(jobMB.job)}" 
                                              actionListener="#{jobMB.addJobRequest(jobMB.job)}" 
                                              rendered="#{jobMB.isRenderedRequestJobButton(jobMB.job)}" 
