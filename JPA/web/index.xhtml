@@ -135,9 +135,8 @@
                     <h3 style="display: inline;">Lista de trabalhos</h3>
 
                     <a data-toggle="popover" id="notifications-btn" title="Notificações" data-placement="bottom" data-content="" style="float: right;"> 
-                        <h:form id="notification-form">
-                            <p:outputLabel id="notification-count" class="btn btn-notification" value="#{notificationMB.notificationCount()}" rendered="#{userMB.authorized}"  />         
-                           
+                        <h:form>
+                            <p:outputLabel id="notification-count" class="btn btn-notification" value="#{notificationMB.notificationCount()}" rendered="#{userMB.authorized}"  />                 
                         </h:form>
                     </a>                              
                 </div>
