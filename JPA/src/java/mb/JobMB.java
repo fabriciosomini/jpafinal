@@ -392,14 +392,13 @@ public class JobMB extends BaseMB {
             JobStatusType status = JobStatusType.getValue(j.getJobStatusType());
             if (isJobMine && status != JobStatusType.CANCELED_BY_HIRER
                     && status != JobStatusType.CANCELED_BY_HIREE) {
-                if (isJobAssigned) {
-                    requestJobButtonText = "Atribuído";
-                } else {
+                if (!isJobAssigned){
                     requestJobButtonText = "Candidatos: " + jobMB.hireesCount(j);
                 }
-            } else {
+            } 
+            
+            if(requestJobButtonText.isEmpty()){
                 requestJobButtonText = jobMB.getButtonJobStatus(j);
-
             }
         }
         return requestJobButtonText;
