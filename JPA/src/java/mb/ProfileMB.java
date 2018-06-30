@@ -79,6 +79,7 @@ public class ProfileMB extends BaseMB{
                     .count();
             long total = jobs.size();
             successRate = ((float)(approvedCount * 100) / total);
+            successRate = Float.isNaN(successRate)? 0.0f : successRate;        
         }
 
         return successRate;

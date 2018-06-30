@@ -53,7 +53,8 @@ public class JobMB extends BaseMB {
     public List<Job> getJobs() {
         verifyAuthorization();
 
-        if (!UserMB.getINSTANCE().isAuthorized()) {
+        UserMB userMB = UserMB.getINSTANCE();
+        if (userMB == null || !userMB.isAuthorized()) {
             jobs = JobRepository.getAll();
         } else {
             MultiMap<String, Object> params = new MultiMap<>();
