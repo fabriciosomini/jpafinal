@@ -404,9 +404,9 @@ public class JobMB extends BaseMB {
         return requestJobButtonText;
     }
 
-    public boolean isRenderedSetWorkDoneButton(Job j) {
+    public boolean isRenderedSetJobDoneButton(Job j) {
 
-        boolean isRenderedSetWorkDoneButton = false;
+        boolean isRenderedSetJobDoneButton = false;
         UserMB userMb = UserMB.getINSTANCE();
         JobMB jobMB = JobMB.getINSTANCE();
         if (userMb != null && jobMB != null) {
@@ -416,14 +416,14 @@ public class JobMB extends BaseMB {
 
             boolean isJobStarted = jobStatusType == JobStatusType.STARTED;
 
-            isRenderedSetWorkDoneButton = isAuthorized && isJobGrantedToMe && isJobStarted;
+            isRenderedSetJobDoneButton = isAuthorized && isJobGrantedToMe && isJobStarted;
         }
-        return isRenderedSetWorkDoneButton;
+        return isRenderedSetJobDoneButton;
     }
 
-    public boolean isRenderedSetWorkStartedButton(Job j) {
+    public boolean isRenderedSetJobStartedButton(Job j) {
 
-        boolean isRenderedSetWorkDoneButton = false;
+        boolean isRenderedSetJobDoneButton = false;
         UserMB userMb = UserMB.getINSTANCE();
         JobMB jobMB = JobMB.getINSTANCE();
         if (userMb != null && jobMB != null) {
@@ -433,13 +433,13 @@ public class JobMB extends BaseMB {
 
             boolean isJobNotStarted = jobStatusType == JobStatusType.NOT_STARTED;
 
-            isRenderedSetWorkDoneButton = isAuthorized && isJobGrantedToMe && isJobNotStarted;
+            isRenderedSetJobDoneButton = isAuthorized && isJobGrantedToMe && isJobNotStarted;
         }
-        return isRenderedSetWorkDoneButton;
+        return isRenderedSetJobDoneButton;
     }
 
-    public boolean isRenderedUpdateWorkButton(Job j) {
-        boolean isRenderedUpdateWorkButton = false;
+    public boolean isRenderedUpdateJobButton(Job j) {
+        boolean isRenderedUpdateJobButton = false;
         UserMB userMb = UserMB.getINSTANCE();
         JobMB jobMB = JobMB.getINSTANCE();
         if (userMb != null && jobMB != null) {
@@ -448,11 +448,11 @@ public class JobMB extends BaseMB {
             boolean isJobMine = jobMB.isJobMine(j);
             boolean isJobAssigned = jobMB.isJobAssigned(j);
 
-            isRenderedUpdateWorkButton = isAuthorized && isJobMine && !isJobAssigned
+            isRenderedUpdateJobButton = isAuthorized && isJobMine && !isJobAssigned
                     && (jobStatusType != JobStatusType.CANCELED_BY_HIRER
                     && jobStatusType != JobStatusType.CANCELED_BY_HIREE);
         }
-        return isRenderedUpdateWorkButton;
+        return isRenderedUpdateJobButton;
 
     }
 
