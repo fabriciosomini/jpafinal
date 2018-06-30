@@ -32,13 +32,13 @@ public class Job implements Serializable{
     private String title;
     private String description;
     private float amountPerHour;
-    private JobStatusType jobStatusType;
+    private int jobStatusType;
 
-    public JobStatusType getJobStatusType() {
+    public int getJobStatusType() {
         return jobStatusType;
     }
 
-    public void setJobStatusType(JobStatusType jobStatusType) {
+    public void setJobStatusType(int jobStatusType) {
         this.jobStatusType = jobStatusType;
     }
     @OneToMany(mappedBy = "job")

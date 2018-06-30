@@ -176,6 +176,8 @@
                                                  actionListener="#{jobMB.addJobRequest(job)}" 
                                                  rendered="#{jobMB.isRenderedRequestJobButton(job)}" 
                                                  disabled="${jobMB.isDisabledRequestJobButton(job)}" />
+                                <p:outputLabel rendered="#{!jobMB.isRenderedRequestJobButton(job)}" 
+                                               value="#{jobMB.getRequestJobButtonText(job)}"></p:outputLabel>
                             </p:column>
                         </p:dataTable>
                     </h:form>  

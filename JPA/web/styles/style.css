@@ -142,5 +142,6 @@ li.list-group-item{
 }
 
 .min-width-150{
-    min-width: 185px;
+    min-width: 160px;
+    width: auto;
 }
