@@ -26,7 +26,7 @@
     </h:head>
     <h:body>
         <!-- #################################### DIV POPOVER DE NOTIFICAÇÕES #################################### -->
-
+       
         <div class="popover-body" style="display: none;">
             <h:form>
                 <ul>
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="container">
-            <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
+            <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.authorized}">
                 <h:form>
                     <div class="row">
                         <div class="col-4">
@@ -91,7 +91,7 @@
                 </h:form>
             </h:panelGroup>
 
-            <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
+            <h:panelGroup id="pg-user-logged" rendered="#{userMB.authorized}">
                 <h:form id="form">
                     <div class="row">
                         <div class="col-3">
@@ -117,7 +117,7 @@
                         </div>
                         <div class="col-6"></div>
                         <div class="col-3" align="center">
-                            <p:commandButton class="btn btn-block btn-primary" value="Adicionar trabalho" actionListener="#{jobMB.newJob()}" action="jobdetails.xhtml?faces-redirect=true" rendered="#{userMB.isAuthorized()}" />
+                            <p:commandButton class="btn btn-block btn-primary" value="Adicionar trabalho" actionListener="#{jobMB.newJob()}" action="jobdetails.xhtml?faces-redirect=true" rendered="#{userMB.authorized}" />
                         </div>
                     </div>
                 </h:form>
@@ -135,8 +135,9 @@
                     <h3 style="display: inline;">Lista de trabalhos</h3>
 
                     <a data-toggle="popover" id="notifications-btn" title="Notificações" data-placement="bottom" data-content="" style="float: right;"> 
-                        <h:form>
-                            <p:outputLabel class="btn btn-notification" value="#{notificationMB.notificationCount()}" rendered="#{userMB.isAuthorized()}"  />         
+                        <h:form id="notification-form">
+                            <p:outputLabel id="notification-count" class="btn btn-notification" value="#{notificationMB.notificationCount()}" rendered="#{userMB.authorized}"  />         
+                            <p:poll interval="1" listener="#{notificationMB.refresh}"/>
                         </h:form>
                     </a>                              
                 </div>
@@ -170,7 +171,7 @@
                                 <f:facet name="header">Contratante</f:facet>
                                 <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
                             </p:column>
-                            <p:column rendered="#{userMB.isAuthorized()}">
+                            <p:column rendered="#{userMB.authorized}">
                                 <p:commandButton class="btn btn-success min-width-150" 
                                                  value="#{jobMB.getRequestJobButtonText(job)}" 
                                                  actionListener="#{jobMB.addJobRequest(job)}" 

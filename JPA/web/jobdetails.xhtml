@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="container">
-                <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.isAuthorized()}">
+                <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.authorized}">
                     <div class="row">
                         <div class="col-4">
                             <p:inputText class="form-control" value="#{userMB.user.email}" pt:placeholder="E-mail"/>
@@ -52,7 +52,7 @@
                     </div>
                 </h:panelGroup>
 
-                <h:panelGroup id="pg-user-logged" rendered="#{userMB.isAuthorized()}">
+                <h:panelGroup id="pg-user-logged" rendered="#{userMB.authorized}">
                     <div class="row">
                         <div class="col">
                             <p:outputLabel value="Olá, #{userMB.user.firstName}!" />

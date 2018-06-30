@@ -17,6 +17,7 @@ import javax.faces.bean.SessionScoped;
 import entity.Notification;
 import model.NotificationType;
 import entity.User;
+import java.io.Serializable;
 import java.util.HashMap;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -30,7 +31,7 @@ import repository.NotificationRepository;
 @Named(value = "notificationMB")
 @ManagedBean
 @SessionScoped
-public class NotificationMB extends BaseMB {
+public class NotificationMB extends BaseMB implements Serializable {
 
     private static NotificationMB INSTANCE;
     private List<Notification> notifications;
@@ -45,6 +46,12 @@ public class NotificationMB extends BaseMB {
 
     public static NotificationMB getINSTANCE() {
         return INSTANCE;
+    }
+    
+    public void refresh(){
+        if(UserMB.getINSTANCE().isAuthorized()){
+            getNotifications();
+        }
     }
 
     public List<Notification> getNotifications() {
@@ -102,7 +109,8 @@ public class NotificationMB extends BaseMB {
 
     public int notificationCount() {
         verifyAuthorization();
-        return notifications.size();
+        
+        return getNotifications().size();
     }
 
     public boolean isEmpty() {

@@ -96,7 +96,7 @@
                                 <f:facet name="header">Contratante</f:facet>
                                 <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
                             </p:column>
-                            <p:column rendered="#{userMB.isAuthorized()}">
+                            <p:column rendered="#{userMB.authorized}">
                                 <p:outputLabel class="btn btn-success min-width-150" 
                                                  value="#{jobMB.getRequestJobButtonText(job)}" 
                                                  rendered="#{jobMB.isRenderedRequestJobButton(job)}" 
