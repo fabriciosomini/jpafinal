@@ -187,7 +187,7 @@
                                              actionListener="#{jobMB.addJobRequest(jobMB.job)}" 
                                              rendered="#{jobMB.isRenderedRequestJobButton(jobMB.job)}" 
                                              disabled="#{jobMB.isDisabledRequestJobButton(jobMB.job)}" />
-
+                            <p:commandButton class="btn btn-block btn-primary" value="Reativar trabalho" actionListener="#{jobMB.setJobAsUnassigned(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobUnassignedJobButton(jobMB.job)}" update="pg-job-edit"/>
                         </div>
                     </div>
 
