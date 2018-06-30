@@ -225,6 +225,20 @@ public class JobMB extends BaseMB {
                 j.getHirer(), j.getAcceptedHiree(), job);
     }
 
+    public void setJobAsApprovedByHirer(Job j) {
+        j.setJobStatusType(JobStatusType.APPROVED.getValue());
+        JobRepository.update(j);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.JOB_APPROVED,
+                j.getHirer(), j.getAcceptedHiree(), job);
+    }
+
+    public void setJobAsReprovedByHirer(Job j) {
+        j.setJobStatusType(JobStatusType.REPROVED.getValue());
+        JobRepository.update(j);
+        NotificationMB.getINSTANCE().generateNotification(NotificationType.JOB_REPROVED,
+                j.getHirer(), j.getAcceptedHiree(), job);
+    }
+
     public boolean isJobPersisted(Job j) {
         return j.getId() != 0;
     }
@@ -250,6 +264,12 @@ public class JobMB extends BaseMB {
                 break;
             case DONE:
                 jobStatus = "Trabalho concluído";
+                break;
+            case APPROVED:
+                jobStatus = "Trabalho Aprovado";
+                break;
+            case REPROVED:
+                jobStatus = "Trabalho Reprovado";
                 break;
             case STARTED:
                 jobStatus = "Trabalho em progresso";
@@ -288,6 +308,12 @@ public class JobMB extends BaseMB {
                     break;
                 case DONE:
                     jobStatus = "Concluído";
+                    break;
+                case APPROVED:
+                    jobStatus = "Aprovado";
+                    break;
+                case REPROVED:
+                    jobStatus = "Reprovado";
                     break;
                 case STARTED:
                     jobStatus = "Em progresso";
@@ -351,12 +377,15 @@ public class JobMB extends BaseMB {
             boolean isAuthorized = userMb.isAuthorized();
             boolean isJobPersisted = jobMB.isJobPersisted(j);
             boolean isJobMine = jobMB.isJobMine(j);
+            boolean isJobApproved = jobStatusType == JobStatusType.APPROVED;
+            boolean isJobReproved = jobStatusType == JobStatusType.REPROVED;
             boolean isJobCanceledByHiree = jobStatusType == JobStatusType.CANCELED_BY_HIREE;
             boolean isJobCanceledByHirer = jobStatusType == JobStatusType.CANCELED_BY_HIRER;
             boolean isJobDone = jobStatusType == JobStatusType.DONE;
 
             isRenderedRemoveJobButton = isAuthorized && isJobPersisted && isJobMine
-                    && (!isJobCanceledByHiree && !isJobCanceledByHirer && !isJobDone);
+                    && (!isJobCanceledByHiree && !isJobCanceledByHirer 
+                    && !isJobApproved && !isJobReproved && !isJobDone);
         }
         return isRenderedRemoveJobButton;
     }
@@ -371,12 +400,18 @@ public class JobMB extends BaseMB {
             boolean isAuthorized = userMb.isAuthorized();
             boolean isJobGrantedToMe = jobMB.isJobGrantedToMe(j);
             boolean isJobMine = jobMB.isJobMine(j);
+             boolean isJobApproved = jobStatusType == JobStatusType.APPROVED;
+            boolean isJobReproved = jobStatusType == JobStatusType.REPROVED;
             boolean isJobCanceledByHiree = jobStatusType == JobStatusType.CANCELED_BY_HIREE;
             boolean isJobCanceledByHirer = jobStatusType == JobStatusType.CANCELED_BY_HIRER;
             boolean isJobDone = jobStatusType == JobStatusType.DONE;
 
-            isRenderedCancelJobButton = isAuthorized && isJobGrantedToMe && !isJobMine
-                    && (!isJobCanceledByHiree && !isJobCanceledByHirer && !isJobDone);
+            isRenderedCancelJobButton = isAuthorized && isJobGrantedToMe 
+                    && !isJobMine
+                    && (!isJobCanceledByHiree && !isJobCanceledByHirer 
+                    && !isJobApproved
+                    && !isJobReproved 
+                    && !isJobDone);
         }
         return isRenderedCancelJobButton;
     }
@@ -392,12 +427,12 @@ public class JobMB extends BaseMB {
             JobStatusType status = JobStatusType.getValue(j.getJobStatusType());
             if (isJobMine && status != JobStatusType.CANCELED_BY_HIRER
                     && status != JobStatusType.CANCELED_BY_HIREE) {
-                if (!isJobAssigned){
+                if (!isJobAssigned) {
                     requestJobButtonText = "Candidatos: " + jobMB.hireesCount(j);
                 }
-            } 
-            
-            if(requestJobButtonText.isEmpty()){
+            }
+
+            if (requestJobButtonText.isEmpty()) {
                 requestJobButtonText = jobMB.getButtonJobStatus(j);
             }
         }
@@ -449,7 +484,9 @@ public class JobMB extends BaseMB {
             boolean isJobAssigned = jobMB.isJobAssigned(j);
 
             isRenderedUpdateJobButton = isAuthorized && isJobMine && !isJobAssigned
-                    && (jobStatusType != JobStatusType.CANCELED_BY_HIRER
+                    && (jobStatusType != JobStatusType.APPROVED
+                    && jobStatusType != JobStatusType.REPROVED
+                    && jobStatusType != JobStatusType.CANCELED_BY_HIRER
                     && jobStatusType != JobStatusType.CANCELED_BY_HIREE);
         }
         return isRenderedUpdateJobButton;
@@ -475,7 +512,7 @@ public class JobMB extends BaseMB {
     }
 
     public boolean isRenderedSetHireeButton(Job j) {
-         boolean isRenderedSetHireeButton = false;
+        boolean isRenderedSetHireeButton = false;
         UserMB userMb = UserMB.getINSTANCE();
         JobMB jobMB = JobMB.getINSTANCE();
         if (userMb != null && jobMB != null) {
@@ -490,5 +527,37 @@ public class JobMB extends BaseMB {
         }
         return isRenderedSetHireeButton;
     }
-   
+
+    public boolean isRenderedApproveJobButton(Job j) {
+        boolean isRenderedApproveJobButton = false;
+        UserMB userMb = UserMB.getINSTANCE();
+        JobMB jobMB = JobMB.getINSTANCE();
+        if (userMb != null && jobMB != null) {
+            JobStatusType jobStatusType = JobStatusType.getValue(j.getJobStatusType());;
+
+            boolean isAuthorized = userMb.isAuthorized();
+            boolean isJobMine = jobMB.isJobMine(j);
+            isRenderedApproveJobButton = isAuthorized
+                    && isJobMine
+                    && jobStatusType == JobStatusType.DONE;
+        }
+        return isRenderedApproveJobButton;
+    }
+
+    public boolean isRenderedReproveJobButton(Job j) {
+        boolean isRenderedApproveJobButton = false;
+        UserMB userMb = UserMB.getINSTANCE();
+        JobMB jobMB = JobMB.getINSTANCE();
+        if (userMb != null && jobMB != null) {
+            JobStatusType jobStatusType = JobStatusType.getValue(j.getJobStatusType());;
+
+            boolean isAuthorized = userMb.isAuthorized();
+            boolean isJobMine = jobMB.isJobMine(j);
+            isRenderedApproveJobButton = isAuthorized
+                    && isJobMine
+                    && jobStatusType == JobStatusType.DONE;
+        }
+        return isRenderedApproveJobButton;
+    }
+
 }

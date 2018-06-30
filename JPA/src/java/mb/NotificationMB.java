@@ -70,6 +70,10 @@ public class NotificationMB extends BaseMB {
             MultiMap<String, Object> paramsHiree = new MultiMap<>();
             paramsHiree.put("notificationType", NotificationType.REQUEST_ACCEPTED.getValue());
             paramsHiree.put("$conditionalOperator", "OR");
+             paramsHiree.put("notificationType", NotificationType.JOB_APPROVED.getValue());
+            paramsHiree.put("$conditionalOperator", "OR");
+             paramsHiree.put("notificationType", NotificationType.JOB_REPROVED.getValue());
+            paramsHiree.put("$conditionalOperator", "OR");
             paramsHiree.put("notificationType", NotificationType.JOB_CANCELED_BY_HIRER.getValue());
             paramsHirer.put("$conditionalOperator", "AND");
             paramsHiree.put("hiree.id", userId);

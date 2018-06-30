@@ -19,7 +19,9 @@ public enum JobStatusType {
     STARTED(102),
     CANCELED_BY_HIREE(103),
     CANCELED_BY_HIRER(104),
-    DONE(105);
+    DONE(105),
+    APPROVED(106),
+    REPROVED(107);
 
     public static JobStatusType getValue(int jobStatusTypeValue) {
         List<JobStatusType> values = Arrays.asList(values());

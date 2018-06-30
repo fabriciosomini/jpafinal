@@ -28,23 +28,32 @@ public class NotificationHelper {
                 description = "Novo(a) candidato(a) para o trabalho: " + job.getTitle();
                 break;
             case JOB_CANCELED_BY_HIREE:
-                description = "Candidato(a) " + hiree.getFirstName() + hiree.getLastName()
+                description = "Candidato(a) " + hiree.getFirstName() + " "
+                        + hiree.getLastName()
                         + " desistiu do trabalho: " + job.getTitle();
                 break;
             case JOB_CANCELED_BY_HIRER:
-                description = "Contratador(a) " + hirer.getFirstName()
+                description = "Contratador(a) " + hirer.getFirstName() + " "
                         + hirer.getLastName() + " cancelou o trabalho: " + job.getTitle();
                 break;
             case JOB_DONE:
-                description = "Candidato(a) " + hiree.getFirstName() + hiree.getLastName()
+                description = "Candidato(a) " + hiree.getFirstName() + " " + hiree.getLastName()
                         + " concluiu o trabalho: " + job.getTitle();
                 break;
             case JOB_STARTED:
-                description = "Candidato(a) " + hiree.getFirstName() + hiree.getLastName()
+                description = "Candidato(a) " + hiree.getFirstName() + " " + hiree.getLastName()
                         + " iniciou o trabalho: " + job.getTitle();
                 break;
+            case JOB_APPROVED:
+                description = "Contratador(a) " + hirer.getFirstName() + " "
+                        + hirer.getLastName() + " aprovou o trabalho: " + job.getTitle();
+                break;
+            case JOB_REPROVED:
+                description = "Contratador(a) " + hirer.getFirstName() + " "
+                        + hirer.getLastName() + " reprovou o trabalho: " + job.getTitle();
+                break;
         }
-        
+
         notification.setDescription(description);
         notification.setNotificationType(noticationType);
         notification.setHirer(hirer);

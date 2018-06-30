@@ -15,7 +15,9 @@ public enum NotificationType {
     JOB_STARTED(2),
     JOB_CANCELED_BY_HIREE(3),
     JOB_CANCELED_BY_HIRER(4),
-    JOB_DONE(5);
+    JOB_DONE(5), 
+    JOB_APPROVED(6),
+    JOB_REPROVED(7);
 
     private final int value;
 

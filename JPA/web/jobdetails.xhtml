@@ -175,8 +175,10 @@
                         <div class="col-2">
                             <p:commandButton class="btn btn-block btn-secondary" value="Encerrar" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isRenderedRemoveJobButton(jobMB.job) and jobMB.isRenderedUpdateJobButton(jobMB.job)}"/>
                             <p:commandButton class="btn btn-block btn-secondary" value="Desistir" actionListener="#{jobMB.setJobAsCanceledByHiree(jobMB.job)}" rendered="#{jobMB.isRenderedCancelJobButton(jobMB.job)}"/>
+                            <p:commandButton class="btn btn-block btn-secondary" value="Reprovar" actionListener="#{jobMB.setJobAsReprovedByHirer(jobMB.job)}" rendered="#{jobMB.isRenderedReproveJobButton(jobMB.job)}"/>
                         </div>
                         <div class="col-2">
+                            <p:commandButton class="btn btn-block btn-primary" value="Aprovar" actionListener="#{jobMB.setJobAsApprovedByHirer(jobMB.job)}" rendered="#{jobMB.isRenderedApproveJobButton(jobMB.job)}"/>
                             <p:commandButton class="btn btn-block btn-secondary" value="Encerrar" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isRenderedRemoveJobButton(jobMB.job) and !jobMB.isRenderedUpdateJobButton(jobMB.job)}"/>
                             <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{jobMB.isRenderedUpdateJobButton(jobMB.job)}" update="pg-job-edit"/>
                             <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobDoneButton(jobMB.job)}"/>
