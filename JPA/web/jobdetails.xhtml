@@ -145,7 +145,7 @@
                                              rowsPerPageTemplate="10,20,35">
                                     <p:column width="40%">
                                         <f:facet name="header">Nome</f:facet>
-                                        <h:commandLink value="#{hiree.firstName} #{hiree.lastName}" action="jobdetails.xhtml?faces-redirect=true" />
+                                        <h:commandLink value="#{hiree.firstName} #{hiree.lastName}" actionListener="#{profileMB.loadProfile(hiree)}"  />
                                     </p:column>
                                     <p:column width="40%">
                                         <f:facet name="header">E-mail</f:facet>

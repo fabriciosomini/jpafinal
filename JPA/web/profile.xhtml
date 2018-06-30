@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <title>Freelancer</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" />
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/styles/style.css" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet" />
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    </h:head>
+    <h:body>
+        <div class="jumbotron jumbotron-fluid img">
+            <div class="container" align="center">
+                <h1 class="display-4">FreeLancer</h1>
+                <p class="lead">Encontre o freelancer para o seu projeto!</p>
+                <p align="right"></p>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5>Perfil</h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <hr />
+                </div>
+            </div>
+
+            <h:form id="form">
+                <div class="row row-spaced">
+                    <div class="col">
+                        <h5 style="display: inline; line-height: 2rem;">Nome: </h5>
+                        <p:outputLabel id="name" value="#{profileMB.profile.firstName.concat(' ').concat(profileMB.profile.lastName)}" ></p:outputLabel>
+                    </div>
+                </div>
+                 <div class="row row-spaced">
+                    <div class="col">
+                        <h5 style="display: inline; line-height: 2rem;">Renda total: </h5>
+                        <p:outputLabel id="income" value="R$ #{profileMB.getIncome()}" ></p:outputLabel>
+                    </div>
+                </div>
+                
+                 <div class="row row-spaced">
+                    <div class="col">
+                        <h5 style="display: inline; line-height: 2rem;">Taxa de sucesso: </h5>
+                        <p:outputLabel id="success-percentage" value="#{profileMB.getSuccessRate()}%" ></p:outputLabel>
+                    </div>
+                </div>
+            </h:form>            
+            <div class="row">
+                <div class="col">
+                    <hr />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col" align="center">
+                    <h5>Lista de trabalhos</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <hr />
+                </div>
+            </div>
+            <h:form>
+                <div class="row">
+                    <div class="col">
+                        <p:dataTable id="table-jobs" value="#{profileMB.jobs}" var="job" class="table table-bordered table-striped"
+                                     rows="10"
+                                     paginator="true"
+                                     emptyMessage="Não há registros"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="10,20,35">
+                            <p:column width="45%">
+                                <f:facet name="header">Trabalho</f:facet>
+                                <h:commandLink value="#{job.title}" action="jobdetails.xhtml?faces-redirect=true" actionListener="#{jobMB.edit(job)}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Valor por hora</f:facet>
+                                <h:outputText value="#{job.amountPerHour}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Contratante</f:facet>
+                                <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
+                            </p:column>
+                            <p:column rendered="#{userMB.isAuthorized()}">
+                                <p:outputLabel class="btn btn-success min-width-150" 
+                                                 value="#{jobMB.getRequestJobButtonText(job)}" 
+                                                 rendered="#{jobMB.isRenderedRequestJobButton(job)}" 
+                                                 />
+                                <p:outputLabel rendered="#{!jobMB.isRenderedRequestJobButton(job)}" 
+                                               value="#{jobMB.getRequestJobButtonText(job)}"></p:outputLabel>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </h:form>
+            <div class="row row-spaced">
+                <div class="col-2">
+                    <p:commandButton class="btn btn-block btn-secondary" value="Voltar" action="#{profileMB.back()}" immediate="true" />
+                </div>
+                <div class="col-8"></div>
+
+            </div>
+            <div class="row">
+                <div class="col" align="center">
+                    <p>Autores: Fabricio M. Somini e Guilherme C. Milak</p>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
+
+
