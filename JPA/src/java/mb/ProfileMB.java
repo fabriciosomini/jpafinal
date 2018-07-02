@@ -28,7 +28,7 @@ import repository.JobRepository;
 @Named(value = "profileMB")
 @ManagedBean
 @SessionScoped
-public class ProfileMB extends BaseMB{
+public class ProfileMB extends BaseMB {
 
     private User profile;
     private List<Job> jobs;
@@ -57,8 +57,7 @@ public class ProfileMB extends BaseMB{
     }
 
     public void back() {
-
-        NavigationHelper.navigate("jobdetails.xhtml?faces-redirect=true");
+        NavigationHelper.navigate("index.xhtml?faces-redirect=true");
     }
 
     public double getIncome() {
@@ -78,8 +77,8 @@ public class ProfileMB extends BaseMB{
                     .filter(k -> k.getJobStatusType() == JobStatusType.APPROVED.getValue())
                     .count();
             long total = jobs.size();
-            successRate = ((float)(approvedCount * 100) / total);
-            successRate = Float.isNaN(successRate)? 0.0f : successRate;        
+            successRate = ((float) (approvedCount * 100) / total);
+            successRate = Float.isNaN(successRate) ? 0.0f : successRate;
         }
 
         return successRate;

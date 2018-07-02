@@ -21,7 +21,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>       
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="form-main">
             <div class="jumbotron jumbotron-fluid img">
                 <div class="container" align="center">
                     <h1 class="display-4">FreeLancer</h1>
@@ -179,7 +179,7 @@
                         <div class="col-2">
                             <p:commandButton class="btn btn-block btn-primary" value="Aprovar" actionListener="#{jobMB.setJobAsApprovedByHirer(jobMB.job)}" rendered="#{jobMB.isRenderedApproveJobButton(jobMB.job)}"/>
                             <p:commandButton class="btn btn-block btn-secondary" value="Encerrar" actionListener="#{jobMB.setJobAsCanceledByHirer(jobMB.job)}" rendered="#{jobMB.isRenderedRemoveJobButton(jobMB.job) and !jobMB.isRenderedUpdateJobButton(jobMB.job)}"/>
-                            <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{jobMB.isRenderedUpdateJobButton(jobMB.job)}" update="pg-job-edit"/>
+                            <p:commandButton class="btn btn-block btn-primary" value="Salvar trabalho" actionListener="#{jobMB.saveJob()}" rendered="#{jobMB.isRenderedUpdateJobButton(jobMB.job)}" update=":form-main:pg-job-edit"/>
                             <p:commandButton class="btn btn-block btn-primary" value="Concluir trabalho" actionListener="#{jobMB.setJobAsDone(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobDoneButton(jobMB.job)}"/>
                             <p:commandButton class="btn btn-block btn-primary" value="Iniciar trabalho" actionListener="#{jobMB.setJobAsStarted(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobStartedButton(jobMB.job)}"/>
                             <p:commandButton class="btn btn-block btn-success" 
@@ -187,7 +187,7 @@
                                              actionListener="#{jobMB.addJobRequest(jobMB.job)}" 
                                              rendered="#{jobMB.isRenderedRequestJobButton(jobMB.job)}" 
                                              disabled="#{jobMB.isDisabledRequestJobButton(jobMB.job)}" />
-                            <p:commandButton class="btn btn-block btn-primary" value="Reativar trabalho" actionListener="#{jobMB.setJobAsUnassigned(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobUnassignedJobButton(jobMB.job)}" update="pg-job-edit"/>
+                            <p:commandButton class="btn btn-block btn-primary" value="Reativar trabalho" actionListener="#{jobMB.setJobAsUnassigned(jobMB.job)}" rendered="#{jobMB.isRenderedSetJobUnassignedJobButton(jobMB.job)}" update=":form-main:pg-job-edit"/>
                         </div>
                     </div>
 

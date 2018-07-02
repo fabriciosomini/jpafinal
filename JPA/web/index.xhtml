@@ -59,8 +59,8 @@
             </div>
         </div>
         <div class="container">
-            <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.authorized}">
-                <h:form>
+            <h:form>
+                <h:panelGroup id="pg-signin-signup" rendered="#{!userMB.authorized}">
                     <div class="row">
                         <div class="col-4">
                             <p:inputText class="form-control" label="E-mail" id="email" value="#{userMB.user.email}" pt:placeholder="E-mail" required="true"/>
@@ -88,8 +88,8 @@
                     <h:panelGroup id="messages">
                         <p:messages globalOnly="true" styleClass="validation-message" showIcon="false" autoUpdate="true"></p:messages>
                     </h:panelGroup>
-                </h:form>
-            </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
 
             <h:panelGroup id="pg-user-logged" rendered="#{userMB.authorized}">
                 <h:form id="form">
@@ -144,38 +144,41 @@
 
             <div class="row row-spaced">
                 <div class="col">
-                    <h:form>
-                        <p:dataTable id="table-jobs" value="#{jobMB.jobs}" var="job" class="table table-bordered table-striped"
-                                     rows="10"
-                                     paginator="true"
-                                     emptyMessage="Não há registros"
-                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="10,20,35">
-                            <p:column width="45%" class="align-middle">
-                                <f:facet name="header">Trabalho</f:facet>
-                                <h:commandLink value="#{job.title}" action="jobdetails.xhtml?faces-redirect=true" actionListener="#{jobMB.edit(job)}" />
-                            </p:column>
-                            <p:column class="align-middle">
-                                <f:facet name="header">Valor por hora</f:facet>
-                                <h:outputText value="#{job.amountPerHour}" />
-                            </p:column>
-                            <p:column class="align-middle">
-                                <f:facet name="header">Contratante</f:facet>
-                                <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
-                            </p:column>
-                            <p:column rendered="#{userMB.authorized}" class="align-middle">
-                                <p:commandButton class="btn btn-block btn-success" 
-                                                 value="#{jobMB.getRequestJobButtonText(job)}" 
-                                                 actionListener="#{jobMB.addJobRequest(job)}" 
-                                                 rendered="#{jobMB.isRenderedRequestJobButton(job)}" 
-                                                 disabled="${jobMB.isDisabledRequestJobButton(job)}" />
-                                <p:outputLabel rendered="#{!jobMB.isRenderedRequestJobButton(job)}" 
-                                               value="#{jobMB.getRequestJobButtonText(job)}" class="align-middle" />
-                            </p:column>
-                        </p:dataTable>
+                    <h:form id="form-tbl-jobs">
+                        <h:panelGroup id="tbl-jobs">
+                            <p:dataTable id="table-jobs" value="#{jobMB.jobs}" var="job" class="table table-bordered table-striped"
+                                         rows="10"
+                                         paginator="true"
+                                         emptyMessage="Não há registros"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="10,20,35">
+                                <p:column width="45%" class="align-middle">
+                                    <f:facet name="header">Trabalho</f:facet>
+                                    <h:commandLink value="#{job.title}" action="jobdetails.xhtml?faces-redirect=true" actionListener="#{jobMB.edit(job)}" />
+                                </p:column>
+                                <p:column class="align-middle">
+                                    <f:facet name="header">Valor por hora</f:facet>
+                                    <h:outputText value="#{job.amountPerHour}" />
+                                </p:column>
+                                <p:column class="align-middle">
+                                    <f:facet name="header">Contratante</f:facet>
+                                    <h:outputText value="#{job.hirer.firstName} #{job.hirer.lastName}" />
+                                </p:column>
+                                <p:column rendered="#{userMB.authorized}" class="align-middle">
+                                    <p:commandButton class="btn btn-block btn-success" 
+                                                     value="#{jobMB.getRequestJobButtonText(job)}" 
+                                                     actionListener="#{jobMB.addJobRequest(job)}" 
+                                                     rendered="#{jobMB.isRenderedRequestJobButton(job)}" 
+                                                     disabled="${jobMB.isDisabledRequestJobButton(job)}" 
+                                                     update=":form-tbl-jobs:tbl-jobs" />
+                                    <p:outputLabel rendered="#{!jobMB.isRenderedRequestJobButton(job)}" 
+                                                   value="#{jobMB.getRequestJobButtonText(job)}" class="align-middle" />
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
                     </h:form>  
                 </div>
-            </div>
+            </div>            
 
             <div class="row">
                 <div class="col">
